@@ -1,0 +1,21 @@
+<div>
+    <h1>Dashboard</h1>
+    <p>Owner ID: {{ ownerId }}</p>
+  
+    <h2>Clubs:</h2>
+    <ul *ngIf="clubs.length > 0; else noClubsTemplate">
+      <li *ngFor="let club of clubs">
+        <p>Phone: {{ club.phone }}</p>
+        <p>Name: {{ club.name }}</p>
+        <p>Email: {{ club.email }}</p>
+        <p>Instagram: {{ club.instagram }}</p>
+        <p>Facebook: {{ club.facebook }}</p>
+        <p>Twitter: {{ club.twitter }}</p>
+      </li>
+    </ul>
+    <ng-template #noClubsTemplate>
+      <p>No clubs found.</p>
+      <button>Add Club</button>
+    </ng-template>
+  </div>
+  
