@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DashboardService } from '../../services/dashboard.service';
 import { ClubResponse } from '../types/club-response';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   providers: [
     DashboardService
@@ -38,6 +39,12 @@ export class DashboardComponent implements OnInit {
       next: (data) => this.clubs = data,
       error: (err) => console.error('Error loading clubs', err)
     });
+  }
+
+  onAddClub(): void {
+    // Lógica para adicionar um novo clube
+    console.log('Add Club button clicked');
+    // Aqui você pode redirecionar para um formulário de adição de clube, abrir um modal, etc.
   }
 
 }
