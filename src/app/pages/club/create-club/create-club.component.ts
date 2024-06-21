@@ -1,0 +1,71 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { ClubService } from '../../../services/club.service';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ClubRequest } from '../../types/club-request';
+
+interface CreateClubForm {
+  name: FormControl<string | null>;
+  email: FormControl<string | null>;
+  phone: FormControl<number | null>;
+  instagram: FormControl<string | null>;
+  twitter: FormControl<string | null>;
+  facebook: FormControl<string | null>;
+}
+
+@Component({
+  selector: 'app-create-club',
+  standalone: true,
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    RouterModule,
+    ReactiveFormsModule
+  ],
+  providers: [
+    ClubService
+  ],
+  templateUrl: './create-club.component.html',
+  styleUrl: './create-club.component.scss'
+})
+export class CreateClubComponent implements OnInit{
+
+  createClubForm!: FormGroup<CreateClubForm>;
+
+  constructor(private route: ActivatedRoute, private router: Router, private clubService: ClubService) {
+    this.createClubForm = new FormGroup<CreateClubForm>({
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl(null),
+      instagram: new FormControl(''),
+      twitter: new FormControl(''),
+      facebook: new FormControl(''),
+    });
+  }
+ 
+  ownerId: string = '';
+
+  ngOnInit(): void {
+    this.ownerId = this.route.snapshot.params['owner_id'];
+  }
+
+  onAddClub() {
+    if (this.createClubForm.valid) {
+      console.log(this.createClubForm)
+      this.clubService.createClub(
+        this.ownerId,
+        this.createClubForm.value.name!,
+        this.createClubForm.value.email!,
+        this.createClubForm.value.phone!,
+        this.createClubForm.value.instagram!,
+        this.createClubForm.value.twitter!,
+        this.createClubForm.value.facebook!
+      ).subscribe({
+        next: () => this.router.navigate(['/dashboard', this.ownerId]),
+        error: (err) => console.error('Error creating club', err)
+      });
+    }
+  }
+}

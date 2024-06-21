@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DashboardService } from '../../services/dashboard.service';
 import { ClubResponse } from '../types/club-response';
 import { CommonModule } from '@angular/common';
@@ -17,17 +17,14 @@ import { HttpClientModule } from '@angular/common/http';
     DashboardService
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
-
-
-
 export class DashboardComponent implements OnInit {
 
   ownerId: string = '';
   clubs: ClubResponse[] = [];
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService) { }
+  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private router: Router) { }
 
   ngOnInit(): void {
     this.ownerId = this.route.snapshot.params['owner_id'];
@@ -41,10 +38,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onAddClub(): void {
-    // Lógica para adicionar um novo clube
-    console.log('Add Club button clicked');
-    // Aqui você pode redirecionar para um formulário de adição de clube, abrir um modal, etc.
+  onCreateClub(): void {
+    this.router.navigate(['/club/create-club', this.ownerId]);
   }
 
 }
