@@ -3,7 +3,10 @@
       <h1 class="text-3xl font-bold text-center mb-4 text-text">Contacts</h1>
       <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
         <div class="mb-4">
-          <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
+          <div class="flex flex-row">
+            <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
+            <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditClub()"></fa-icon>
+          </div>
           <p>
             <strong class="text-primary">Email: </strong>
             <span class="text-textsecondary">{{ club.email }}</span>
@@ -31,6 +34,9 @@
             </a>
           </p>
         </div>
+        <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="goBack()">
+          Voltar
+        </button>
       </div>
     </div>
   </div>

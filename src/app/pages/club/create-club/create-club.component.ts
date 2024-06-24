@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ClubService } from '../../../services/club.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ClubRequest } from '../../types/club-request';
 
 interface CreateClubForm {
   name: FormControl<string | null>;
