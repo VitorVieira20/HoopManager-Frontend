@@ -5,5 +5,6 @@ export type ClubResponse = {
     email: string,
     instagram: string,
     facebook: string,
-    twitter: string
+    twitter: string,
+    owner_id: string
 }
