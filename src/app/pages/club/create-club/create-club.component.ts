@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ClubService } from '../../../services/club.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 interface CreateClubForm {
   name: FormControl<string | null>;
@@ -21,7 +22,8 @@ interface CreateClubForm {
     CommonModule,
     HttpClientModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     ClubService
@@ -33,7 +35,12 @@ export class CreateClubComponent implements OnInit{
 
   createClubForm!: FormGroup<CreateClubForm>;
 
-  constructor(private route: ActivatedRoute, private router: Router, private clubService: ClubService) {
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private clubService: ClubService,
+    private modalService: NgbModal
+  ) {
     this.createClubForm = new FormGroup<CreateClubForm>({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -45,9 +52,23 @@ export class CreateClubComponent implements OnInit{
   }
  
   ownerId: string = '';
+  modalRef?: NgbModalRef;
 
   ngOnInit(): void {
     this.ownerId = this.route.snapshot.params['owner_id'];
+  }
+
+  openConfirmationModal(content: TemplateRef<any>): void {
+    this.modalRef = this.modalService.open(content);
+  }
+
+  confirmUpdate(): void {
+    this.modalRef?.close();
+    this.onAddClub();
+  }
+
+  declineUpdate(): void {
+    this.modalRef?.close();
   }
 
   onAddClub() {

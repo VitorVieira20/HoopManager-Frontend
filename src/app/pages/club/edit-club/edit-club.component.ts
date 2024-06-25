@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { DashboardService } from '../../../services/dashboard.service';
 import { ClubResponse } from '../../types/club-response';
 import { ClubUpdateRequest } from '../../types/club-update-request';
+import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 interface EditClubForm {
   name: FormControl<string | null>;
@@ -24,7 +25,8 @@ interface EditClubForm {
     CommonModule,
     HttpClientModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     ClubService,
@@ -37,13 +39,15 @@ export class EditClubComponent implements OnInit {
 
   editClubForm!: FormGroup<EditClubForm>;
   clubId: string = '';
-  club: ClubResponse | null = null;  // Inicia como null
+  club: ClubResponse | null = null;  
+  modalRef?: NgbModalRef;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private clubService: ClubService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +79,19 @@ export class EditClubComponent implements OnInit {
       },
       error: (err) => console.error('Error loading club info', err)
     });
+  }
+
+  openConfirmationModal(content: TemplateRef<any>): void {
+    this.modalRef = this.modalService.open(content);
+  }
+
+  confirmUpdate(): void {
+    this.modalRef?.close();
+    this.onEditClub();
+  }
+
+  declineUpdate(): void {
+    this.modalRef?.close();
   }
 
   onEditClub(): void {
