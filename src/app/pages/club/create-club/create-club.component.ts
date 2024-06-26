@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ClubService } from '../../../services/club.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ClubRequest } from '../../types/club-request';
 
 interface CreateClubForm {
   name: FormControl<string | null>;
@@ -73,16 +74,17 @@ export class CreateClubComponent implements OnInit{
 
   onAddClub() {
     if (this.createClubForm.valid) {
-      console.log(this.createClubForm)
-      this.clubService.createClub(
-        this.ownerId,
-        this.createClubForm.value.name!,
-        this.createClubForm.value.email!,
-        this.createClubForm.value.phone!,
-        this.createClubForm.value.instagram!,
-        this.createClubForm.value.twitter!,
-        this.createClubForm.value.facebook!
-      ).subscribe({
+      const clubRequest: ClubRequest = {
+        owner_id: this.ownerId,
+        name: this.createClubForm.value.name!,
+        email: this.createClubForm.value.email!,
+        phone: this.createClubForm.value.phone!,
+        instagram: this.createClubForm.value.instagram!,
+        twitter: this.createClubForm.value.twitter!,
+        facebook: this.createClubForm.value.facebook!,
+      };
+
+      this.clubService.createClub(clubRequest).subscribe({
         next: () => this.router.navigate(['/dashboard', this.ownerId]),
         error: (err) => console.error('Error creating club', err)
       });

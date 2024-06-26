@@ -12,19 +12,15 @@ export class ClubService {
 
   apiUrl: string = "http://localhost:8081/api/club/";
 
-  createClub(
-    owner_id: string,
-    name: string,
-    email: string,
-    phone: number,
-    instagram: string,
-    twitter: string,
-    facebook: string
-  ) {
-    return this.httpClient.post<ClubRequest>(this.apiUrl, { owner_id, name, email, phone, instagram, twitter, facebook });
+  createClub(clubRequest: ClubRequest) {
+    return this.httpClient.post<ClubRequest>(this.apiUrl, clubRequest);
   }
 
   updateClub(clubId: string, clubUpdateRequest: ClubUpdateRequest) {
     return this.httpClient.put<ClubRequest>(`${this.apiUrl}${clubId}`, clubUpdateRequest);
+  }
+
+  deleteClub(clubId: string) {
+    return this.httpClient.delete(`${this.apiUrl}${clubId}`);
   }
 }
