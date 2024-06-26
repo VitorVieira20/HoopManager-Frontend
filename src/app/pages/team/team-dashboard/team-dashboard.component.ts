@@ -25,8 +25,8 @@ export class TeamDashboardComponent implements OnInit {
 
   clubId: string = '';
   teams: TeamResponse[] = [];
-  //clubToDelete: ClubResponse | null = null;
-  //modalRef?: NgbModalRef;
+  teamToDelete: TeamResponse | null = null;
+  modalRef?: NgbModalRef;
 
   constructor(
     private route: ActivatedRoute, 
@@ -48,7 +48,33 @@ export class TeamDashboardComponent implements OnInit {
   }
 
   onCreateTeam(): void {
-    
+    this.router.navigate(['/team/create-team', this.clubId]);
+  }
+
+  openDeleteModal(content: TemplateRef<any>, club: TeamResponse): void {
+    this.teamToDelete = club;
+    this.modalRef = this.modalService.open(content);
+  }
+
+  declineDelete(): void {
+    this.modalRef?.close();
+  }
+
+  confirmDelete(): void {
+    this.modalRef?.close();
+    this.onDeleteTeam();
+  }
+
+  onDeleteTeam() : void {
+    if (this.teamToDelete) {
+      this.teamService.deleteTeam(this.teamToDelete.id).subscribe({
+        next: () => {
+          this.teams = this.teams.filter(team => team.id !== this.teamToDelete!.id);
+          this.modalRef?.close();
+        },
+        error: (err) => console.error('Error deleting club', err)
+      });
+    }
   }
 
 }

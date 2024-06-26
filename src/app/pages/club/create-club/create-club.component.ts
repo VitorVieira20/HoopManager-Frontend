@@ -63,12 +63,12 @@ export class CreateClubComponent implements OnInit{
     this.modalRef = this.modalService.open(content);
   }
 
-  confirmUpdate(): void {
+  confirmCreation(): void {
     this.modalRef?.close();
     this.onAddClub();
   }
 
-  declineUpdate(): void {
+  declineCreation(): void {
     this.modalRef?.close();
   }
 

@@ -4,6 +4,7 @@ import { ContactsComponent } from './pages/contacts/contacts.component';
 import { CreateClubComponent } from './pages/club/create-club/create-club.component';
 import { EditClubComponent } from './pages/club/edit-club/edit-club.component';
 import { TeamDashboardComponent } from './pages/team/team-dashboard/team-dashboard.component';
+import { CreateTeamComponent } from './pages/team/create-team/create-team.component';
 
 export const routes: Routes = [
     {
@@ -25,5 +26,9 @@ export const routes: Routes = [
     {
         path: "teams/:club_id",
         component: TeamDashboardComponent
+    },
+    {
+        path: "team/create-team/:club_id",
+        component: CreateTeamComponent
     }
 ];
