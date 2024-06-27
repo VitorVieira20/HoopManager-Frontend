@@ -5,6 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TeamService } from '../../../services/team.service';
 import { TeamResponse } from '../../types/team-response';
+import { Location } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-team-dashboard',
@@ -13,7 +16,8 @@ import { TeamResponse } from '../../types/team-response';
     CommonModule,
     HttpClientModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    FontAwesomeModule
   ],
   providers: [
     TeamService
@@ -25,13 +29,15 @@ export class TeamDashboardComponent implements OnInit {
 
   clubId: string = '';
   teams: TeamResponse[] = [];
-  teamToDelete: TeamResponse | null = null;
+  selectedTeam: TeamResponse | null = null;
   modalRef?: NgbModalRef;
+  faEdit = faEdit;
 
   constructor(
     private route: ActivatedRoute, 
     private teamService : TeamService,
     private router: Router,
+    private location: Location,
     private modalService: NgbModal
   ) {}
 
@@ -51,8 +57,8 @@ export class TeamDashboardComponent implements OnInit {
     this.router.navigate(['/team/create-team', this.clubId]);
   }
 
-  openDeleteModal(content: TemplateRef<any>, club: TeamResponse): void {
-    this.teamToDelete = club;
+  openDeleteModal(content: TemplateRef<any>, team: TeamResponse): void {
+    this.selectedTeam = team;
     this.modalRef = this.modalService.open(content);
   }
 
@@ -66,15 +72,22 @@ export class TeamDashboardComponent implements OnInit {
   }
 
   onDeleteTeam() : void {
-    if (this.teamToDelete) {
-      this.teamService.deleteTeam(this.teamToDelete.id).subscribe({
+    if (this.selectedTeam)
+      this.teamService.deleteTeam(this.selectedTeam.id).subscribe({
         next: () => {
-          this.teams = this.teams.filter(team => team.id !== this.teamToDelete!.id);
+          this.teams = this.teams.filter(team => team.id !== this.selectedTeam!.id);
           this.modalRef?.close();
         },
         error: (err) => console.error('Error deleting club', err)
       });
-    }
+  }
+
+  onEditTeam(teamId: string): void {
+    this.router.navigate(['/team/edit-team', teamId])
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
 }

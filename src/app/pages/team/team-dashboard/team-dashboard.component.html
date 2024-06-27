@@ -8,16 +8,19 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             <div *ngFor="let team of teams" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
               <div class="mb-4">
-                <h2 class="text-2xl font-semibold text-textsecondary mb-4">{{ team.name }}</h2>
+                <div class="flex flex-row">
+                    <h2 class="text-2xl font-semibold text-textsecondary mb-4">{{ team.name }}</h2>
+                    <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditTeam(team.id)"></fa-icon>    
+                </div>
               </div>
               <div class="flex flex-wrap space-x-2">
-                <a [routerLink]="['/teams', team.id]" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
+                <a [routerLink]="['/', team.id]" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
                     View Players
                 </a>
-                <a [routerLink]="['/contacts', team.id]" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
+                <a [routerLink]="['/', team.id]" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
                     View Games
                 </a>
-                <a [routerLink]="['/contacts', team.id]" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
+                <a [routerLink]="['/', team.id]" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
                     View Calendar
                 </a>
                 <button (click)="openDeleteModal(deleteModal, team)" class="mt-4 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900">
@@ -28,6 +31,9 @@
           </div>
           <button class="mt-6 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateTeam()">
             Create Team
+          </button>
+          <button class="mt-6 ml-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="goBack()">
+            Go back
           </button>
         </div>
       </ng-container>

@@ -29,7 +29,12 @@ export class ContactsComponent {
   club!: ClubResponse;
   faEdit = faEdit;
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private location: Location, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private dashboardService: DashboardService, 
+    private location: Location, 
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.clubId = this.route.snapshot.params['club_id'];
