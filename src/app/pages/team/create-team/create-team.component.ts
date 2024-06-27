@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TeamService } from '../../../services/team.service';
+import { TeamService } from '../../../services/team/team.service';
 import { TeamRequest } from '../../types/team-request';
 
 interface CreateTeamForm {

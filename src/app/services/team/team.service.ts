@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TeamResponse } from '../pages/types/team-response';
-import { TeamRequest } from '../pages/types/team-request';
-import { TeamUpdateRequest } from '../pages/types/team-update-request';
+import { TeamResponse } from '../../pages/types/team-response';
+import { TeamRequest } from '../../pages/types/team-request';
+import { TeamUpdateRequest } from '../../pages/types/team-update-request';
 
 @Injectable({
   providedIn: 'root'

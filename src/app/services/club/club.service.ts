@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ClubRequest } from '../pages/types/club-request';
-import { ClubUpdateRequest } from '../pages/types/club-update-request';
+import { ClubRequest } from '../../pages/types/club-request';
+import { ClubUpdateRequest } from '../../pages/types/club-update-request';
 
 @Injectable({
   providedIn: 'root'
