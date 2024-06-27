@@ -1,0 +1,55 @@
+<div class="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+    <div class="w-full max-w-4xl bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold text-center mb-4 text-secondary">Add Athlete</h1>
+
+        <form [formGroup]="createPlayerForm" (ngSubmit)="openConfirmationModal(confirmTemplate)">
+            <div class="mb-4">
+                <label class="block text-textsecondaryfont font-semibold mb-2" for="name">Name</label>
+                <input id="name" formControlName="name" type="text" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+            </div>
+            <div class="mb-4">
+                <label class="block text-textsecondaryfont font-semibold mb-2" for="position">Position</label>
+                <input id="position" formControlName="position" type="text" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+            </div>
+            <div class="mb-4">
+                <p class="text text-gray-600">
+                    <span class="text-red-600">Note</span>: You can enter multiple names and positions separated by commas, and the positions should be in the same order as the names. Alternatively, you can create one athlete at a time.
+                </p>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
+                    Create Athlete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+  
+
+<!-- Confirmation Modal Template -->
+<ng-template #confirmTemplate let-modal>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+      <div class="modal-header flex justify-between items-center border-b border-gray-200 pb-3">
+        <h4 class="modal-title text-lg font-semibold text-gray-800">Confirm Athlete Informations</h4>
+        <button type="button" class="text-gray-400 hover:text-gray-600" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body py-4">
+        <p class="text-gray-700">Are you sure you want to save these athlete information?</p>
+        <div class="mt-4 space-y-2 text-gray-600">
+          <p><span class="font-semibold">Name:</span> {{createPlayerForm.value.name}}</p>
+        </div>
+      </div>
+      <div class="modal-footer flex justify-end border-t border-gray-200 pt-3">
+        <button type="button" class="bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mr-2" (click)="declineCreation()">No</button>
+        <button type="button" class="bg-button_primary_color text-white hover:bg-button_primary_hover px-4 py-2 rounded" (click)="confirmCreation()">Yes</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -6,6 +6,8 @@ import { EditClubComponent } from './pages/club/edit-club/edit-club.component';
 import { TeamDashboardComponent } from './pages/team/team-dashboard/team-dashboard.component';
 import { CreateTeamComponent } from './pages/team/create-team/create-team.component';
 import { EditTeamComponent } from './pages/team/edit-team/edit-team.component';
+import { PlayersDahshboardComponent } from './pages/player/players-dahshboard/players-dahshboard.component';
+import { PlayersCreateComponent } from './pages/player/players-create/players-create.component';
 
 export const routes: Routes = [
     {
@@ -35,5 +37,13 @@ export const routes: Routes = [
     {
         path: "team/edit-team/:team_id",
         component: EditTeamComponent
+    },
+    {
+        path: "players/:team_id",
+        component: PlayersDahshboardComponent
+    },
+    {
+        path: "players/create-players/:team_id",
+        component: PlayersCreateComponent
     }
 ];

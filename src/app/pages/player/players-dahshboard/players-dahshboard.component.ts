@@ -3,14 +3,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TeamService } from '../../../services/team/team.service';
-import { TeamResponse } from '../../types/team-response';
+import { PlayerService } from '../../../services/player/player.service';
+import { PlayerResponse } from '../../types/player-response';
 import { Location } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-team-dashboard',
+  selector: 'app-players-dahshboard',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,46 +19,47 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
     NgbModule,
     FontAwesomeModule
   ],
-  providers: [
-    TeamService
-  ],
-  templateUrl: './team-dashboard.component.html',
-  styleUrl: './team-dashboard.component.scss'
-})
-export class TeamDashboardComponent implements OnInit {
 
-  clubId: string = '';
-  teams: TeamResponse[] = [];
-  selectedTeam: TeamResponse | null = null;
+  providers: [
+    PlayerService
+  ],
+  templateUrl: './players-dahshboard.component.html',
+  styleUrl: './players-dahshboard.component.scss'
+})
+export class PlayersDahshboardComponent implements OnInit {
+
+  teamId: string = '';
+  players: PlayerResponse[] = [];
+  selectedPlayer: PlayerResponse | null = null;
   modalRef?: NgbModalRef;
   faEdit = faEdit;
 
   constructor(
     private route: ActivatedRoute, 
-    private teamService : TeamService,
+    private playerService : PlayerService,
     private router: Router,
     private location: Location,
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
-    this.clubId = this.route.snapshot.params['club_id'];
-    this.loadTeams();
+    this.teamId = this.route.snapshot.params['team_id'];
+    this.loadPlayers();
   }
 
-  loadTeams(): void {
-    this.teamService.getTeamsByClubId(this.clubId).subscribe({
-      next: (data) => this.teams = data,
+  loadPlayers(): void {
+    this.playerService.getPlayersByTeamId(this.teamId).subscribe({
+      next: (data) => this.players = data,
       error: (err) => console.error('Error loading clubs', err)
     });
   }
 
-  onCreateTeam(): void {
-    this.router.navigate(['/team/create-team', this.clubId]);
+  onCreatePlayer(): void {
+    this.router.navigate(['/players/create-players', this.teamId]);
   }
 
-  openDeleteModal(content: TemplateRef<any>, team: TeamResponse): void {
-    this.selectedTeam = team;
+  openDeleteModal(content: TemplateRef<any>, team: PlayerResponse): void {
+    this.selectedPlayer = team;
     this.modalRef = this.modalService.open(content);
   }
 
@@ -72,22 +73,21 @@ export class TeamDashboardComponent implements OnInit {
   }
 
   onDeleteTeam() : void {
-    if (this.selectedTeam)
+    /*if (this.selectedTeam)
       this.teamService.deleteTeam(this.selectedTeam.id).subscribe({
         next: () => {
           this.teams = this.teams.filter(team => team.id !== this.selectedTeam!.id);
           this.modalRef?.close();
         },
         error: (err) => console.error('Error deleting club', err)
-      });
+      });*/
   }
 
-  onEditTeam(teamId: string): void {
-    this.router.navigate(['/team/edit-team', teamId])
+  onEditPlayer(playerId: string): void {
+    this.router.navigate(['/player/edit-player', playerId])
   }
 
   goBack(): void {
     this.location.back();
   }
-
 }
