@@ -48,7 +48,7 @@ export class ClubDashboardComponent implements OnInit {
   }
 
   onCreateClub(): void {
-    this.router.navigate(['/club/create-club', this.ownerId]);
+    this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'create-club']);
   }
 
   openDeleteModal(content: TemplateRef<any>, club: ClubResponse): void {

@@ -56,7 +56,7 @@ export class CreateClubComponent implements OnInit{
   modalRef?: NgbModalRef;
 
   ngOnInit(): void {
-    this.ownerId = this.route.snapshot.params['owner_id'];
+    this.ownerId = this.route.parent?.snapshot.params['owner_id'];
   }
 
   openConfirmationModal(content: TemplateRef<any>): void {
@@ -85,7 +85,7 @@ export class CreateClubComponent implements OnInit{
       };
 
       this.clubService.createClub(clubRequest).subscribe({
-        next: () => this.router.navigate(['/dashboard', this.ownerId]),
+        next: () => this.router.navigate(['/dashboard', this.ownerId, 'clubs']),
         error: (err) => console.error('Error creating club', err)
       });
     }

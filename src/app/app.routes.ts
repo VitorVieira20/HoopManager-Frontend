@@ -16,6 +16,7 @@ export const routes: Routes = [
         component: DashboardComponent,
         children: [
           { path: 'clubs', component: ClubDashboardComponent },
+          { path: 'clubs/create-club', component: CreateClubComponent },
           { path: 'teams', component: TeamDashboardComponent },
           { path: 'teams/:club_id', component: TeamDashboardComponent },
           { path: 'teams/create-team/:club_id', component: CreateTeamComponent },
@@ -27,32 +28,4 @@ export const routes: Routes = [
           { path: 'contacts/:club_id', component: ContactsComponent },
         ]
     },
-    {
-        path: "club/create-club/:owner_id",
-        component: CreateClubComponent
-    },
-    {
-        path: "club/edit-club/:club_id",
-        component: EditClubComponent
-    },
-    {
-        path: "teams/:club_id",
-        component: TeamDashboardComponent
-    },
-    {
-        path: "team/create-team/:club_id",
-        component: CreateTeamComponent
-    },
-    {
-        path: "team/edit-team/:team_id",
-        component: EditTeamComponent
-    },
-    {
-        path: "players/:team_id",
-        component: PlayersDahshboardComponent
-    },
-    {
-        path: "players/create-players/:team_id",
-        component: PlayersCreateComponent
-    }
 ];
