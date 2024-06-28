@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ClubService } from '../../../services/club/club.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DashboardService } from '../../../services/dashboard/dashboard.service';
 import { ClubResponse } from '../../types/club-response';
 import { ClubUpdateRequest } from '../../types/club-update-request';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -29,8 +28,7 @@ interface EditClubForm {
     NgbModule
   ],
   providers: [
-    ClubService,
-    DashboardService
+    ClubService
   ],
   templateUrl: './edit-club.component.html',
   styleUrls: ['./edit-club.component.scss']
@@ -46,7 +44,6 @@ export class EditClubComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private clubService: ClubService,
-    private dashboardService: DashboardService,
     private modalService: NgbModal
   ) {}
 
@@ -65,7 +62,7 @@ export class EditClubComponent implements OnInit {
   }
 
   loadClubInfo(): void {
-    this.dashboardService.getClubById(this.clubId).subscribe({
+    this.clubService.getClubById(this.clubId).subscribe({
       next: (data) => {
         this.club = data;
         this.editClubForm.patchValue({
@@ -107,7 +104,7 @@ export class EditClubComponent implements OnInit {
 
       this.clubService.updateClub(this.clubId, clubUpdateRequest).subscribe({
         next: () => {
-          this.router.navigate(['/dashboard', this.club?.owner_id])
+          this.router.navigate(['/dashboard', this.club?.owner_id, 'contacts'])
         },
         error: (err) => console.error('Error updating club', err)
       });

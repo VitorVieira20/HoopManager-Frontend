@@ -8,6 +8,8 @@ import { TeamService } from '../../../services/team/team.service';
 import { TeamRequest } from '../../types/team-request';
 import { TeamUpdateRequest } from '../../types/team-update-request';
 import { TeamResponse } from '../../types/team-response';
+import { ClubResponse } from '../../types/club-response';
+import { ClubService } from '../../../services/club/club.service';
 
 interface EditTeamForm {
   name: FormControl<string | null>
@@ -24,7 +26,8 @@ interface EditTeamForm {
     NgbModule
   ],
   providers: [
-    TeamService
+    TeamService,
+    ClubService
   ],
   templateUrl: './edit-team.component.html',
   styleUrl: './edit-team.component.scss'
@@ -37,6 +40,7 @@ export class EditTeamComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router, 
     private teamService: TeamService,
+    private clubService: ClubService,
     private modalService: NgbModal
   ) {
     this.editTeamForm = new FormGroup<EditTeamForm>({
@@ -44,8 +48,11 @@ export class EditTeamComponent implements OnInit {
     });
   }
 
+  ownerId: string = '';
+  clubId: string = '';
   teamId: string = '';
   team: TeamResponse | null = null;  
+  club: ClubResponse | null = null;
   modalRef?: NgbModalRef;
 
   ngOnInit(): void {
@@ -84,10 +91,13 @@ export class EditTeamComponent implements OnInit {
         name: this.editTeamForm.value.name || '',
       };
 
+      this.clubService.getClubByTeamId(this.teamId).subscribe({
+        next: (data) => this.club = data,
+        error: (err) => console.error('Error loading club information', err)
+      })
+
       this.teamService.updateTeam(this.teamId, teamUpdateRequest).subscribe({
-        next: () => {
-          this.router.navigate(['/teams', this.team?.club_id])
-        },
+        next: () => { this.router.navigate(['/dashboard', this.club?.owner_id, 'teams', this.club?.id]) },
         error: (err) => console.error('Error updating club', err)
       });
     }

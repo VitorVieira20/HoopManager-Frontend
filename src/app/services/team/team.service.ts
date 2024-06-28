@@ -13,12 +13,16 @@ export class TeamService {
 
   apiUrl: string = "http://localhost:8081/api/team/";
 
-  getTeamsByClubId(clubId: string){
+  getTeamsByClubId(clubId: string) {
     return this.httpClient.get<TeamResponse[]>(this.apiUrl + "club/" + clubId)
   }
 
-  getTeamById(teamId: string){
+  getTeamById(teamId: string) {
     return this.httpClient.get<TeamResponse>(this.apiUrl + teamId)
+  }
+
+  getAllTeamsByOwnerId(ownerId: string) {
+    return this.httpClient.get<TeamResponse[]>(this.apiUrl + "all/" + ownerId)
   }
 
   createTeam(teamRequest: TeamRequest) {

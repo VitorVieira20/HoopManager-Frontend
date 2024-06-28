@@ -42,10 +42,12 @@ export class CreateTeamComponent implements OnInit {
     });
   }
 
+  ownerId: string = '';
   clubId: string = '';
   modalRef?: NgbModalRef;
 
   ngOnInit(): void {
+    this.ownerId = this.route.parent?.snapshot.params['owner_id'];
     this.clubId = this.route.snapshot.params['club_id'];
   }
 
@@ -70,7 +72,7 @@ export class CreateTeamComponent implements OnInit {
       };
 
       this.teamService.createTeam(teamRequest).subscribe({
-        next: () => this.router.navigate(['/teams', this.clubId]),
+        next: () => this.router.navigate(['/dashboard', this.ownerId, 'teams', this.clubId]),
         error: (err) => console.error('Error creating club', err)
       });
     }

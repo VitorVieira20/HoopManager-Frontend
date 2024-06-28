@@ -8,6 +8,11 @@ import { PlayerResponse } from '../../types/player-response';
 import { Location } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { ClubService } from '../../../services/club/club.service';
+import { TeamService } from '../../../services/team/team.service';
+import { ClubResponse } from '../../types/club-response';
+import { TeamResponse } from '../../types/team-response';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-players-dahshboard',
@@ -17,49 +22,100 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
     HttpClientModule,
     RouterModule,
     NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
-
   providers: [
-    PlayerService
+    PlayerService,
+    ClubService,
+    TeamService
   ],
   templateUrl: './players-dahshboard.component.html',
-  styleUrl: './players-dahshboard.component.scss'
+  styleUrls: ['./players-dahshboard.component.scss']
 })
 export class PlayersDahshboardComponent implements OnInit {
 
+  ownerId: string = '';
+  clubId: string = '';
   teamId: string = '';
+  clubs: ClubResponse[] = [];
+  teams: TeamResponse[] = [];
   players: PlayerResponse[] = [];
+  selectedClubId: string = '';
+  selectedTeamId: string = '';
   selectedPlayer: PlayerResponse | null = null;
   modalRef?: NgbModalRef;
   faEdit = faEdit;
 
   constructor(
     private route: ActivatedRoute, 
-    private playerService : PlayerService,
+    private playerService: PlayerService,
+    private clubService: ClubService,
+    private teamService: TeamService,
     private router: Router,
     private location: Location,
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
+    this.ownerId = this.route.parent?.snapshot.params['owner_id'];
+    this.clubId = this.route.snapshot.params['club_id'];
     this.teamId = this.route.snapshot.params['team_id'];
-    this.loadPlayers();
+    this.loadClubs();
   }
 
-  loadPlayers(): void {
-    this.playerService.getPlayersByTeamId(this.teamId).subscribe({
-      next: (data) => this.players = data,
+  loadClubs(): void {
+    this.clubService.getClubsByOwnerId(this.ownerId).subscribe({
+      next: (data) => {
+        this.clubs = data;
+        this.selectedClubId = this.clubId ? this.clubId : this.clubs[0]?.id;
+        this.loadTeams();
+      },
       error: (err) => console.error('Error loading clubs', err)
     });
   }
 
-  onCreatePlayer(): void {
-    this.router.navigate(['/players/create-players', this.teamId]);
+  loadTeams(): void {
+    this.teamService.getTeamsByClubId(this.selectedClubId).subscribe({
+      next: (data) => {
+        this.teams = data;
+        this.selectedTeamId = this.teamId ? this.teamId : this.teams[0]?.id;
+        this.loadPlayers();
+      },
+      error: (err) => console.error('Error loading teams', err)
+    });
   }
 
-  openDeleteModal(content: TemplateRef<any>, team: PlayerResponse): void {
-    this.selectedPlayer = team;
+  loadPlayers(): void {
+    if (!this.selectedTeamId) {
+      this.players = [];
+      return;
+    }
+    this.playerService.getPlayersByTeamId(this.selectedTeamId).subscribe({
+      next: (data) => this.players = data,
+      error: (err) => console.error('Error loading players', err)
+    });
+  }
+
+  onClubChange(event: any): void {
+    this.selectedClubId = event.target.value;
+    this.teams = [];
+    this.players = [];
+    this.loadTeams();
+  }
+
+  onTeamChange(event: any): void {
+    this.selectedTeamId = event.target.value;
+    this.players = [];
+    this.loadPlayers();
+  }
+
+  onCreatePlayer(): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'players', 'create-player', this.selectedTeamId]);
+  }
+
+  openDeleteModal(content: TemplateRef<any>, player: PlayerResponse): void {
+    this.selectedPlayer = player;
     this.modalRef = this.modalService.open(content);
   }
 
@@ -69,17 +125,17 @@ export class PlayersDahshboardComponent implements OnInit {
 
   confirmDelete(): void {
     this.modalRef?.close();
-    this.onDeleteTeam();
+    this.onDeletePlayer();
   }
 
-  onDeleteTeam() : void {
-    /*if (this.selectedTeam)
-      this.teamService.deleteTeam(this.selectedTeam.id).subscribe({
+  onDeletePlayer() : void {
+    /*if (this.selectedPlayer)
+      this.playerService.deletePlayer(this.selectedPlayer.id).subscribe({
         next: () => {
-          this.teams = this.teams.filter(team => team.id !== this.selectedTeam!.id);
+          this.players = this.players.filter(player => player.id !== this.selectedPlayer!.id);
           this.modalRef?.close();
         },
-        error: (err) => console.error('Error deleting club', err)
+        error: (err) => console.error('Error deleting player', err)
       });*/
   }
 

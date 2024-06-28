@@ -43,10 +43,12 @@ export class PlayersCreateComponent implements OnInit {
     });
   }
 
+  ownerId: string = '';
   teamId: string = '';
   modalRef?: NgbModalRef;
 
   ngOnInit(): void {
+    this.ownerId = this.route.parent?.snapshot.params['owner_id'];
     this.teamId = this.route.snapshot.params['team_id'];
   }
 
@@ -77,7 +79,7 @@ export class PlayersCreateComponent implements OnInit {
 
         players.forEach(player => {
           this.playerService.createPlayer(player).subscribe({
-            next: () => this.router.navigate(['/team', this.teamId]),
+            next: () => this.router.navigate(['/dashboard', this.ownerId, 'players' ,this.teamId]),
             error: (err) => console.error('Error creating club', err)
           });
           

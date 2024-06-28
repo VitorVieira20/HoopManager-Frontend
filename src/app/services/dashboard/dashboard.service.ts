@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ClubResponse } from '../../pages/types/club-response';
+import { UserResponse } from '../../pages/types/user-response';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,10 @@ export class DashboardService {
 
   constructor(private httpClient: HttpClient) { }
 
-  apiUrl: string = "http://localhost:8081/api/club/";
+  apiUrl: string = "http://localhost:8081/api/user/";
 
-  getClubsByOwnerId(owenerId: string){
-    return this.httpClient.get<ClubResponse[]>(this.apiUrl + "owner/" + owenerId)
-  }
-
-  getClubById(clubId: string){
-    return this.httpClient.get<ClubResponse>(this.apiUrl + clubId)
+  getUserById(ownerId: string){
+    return this.httpClient.get<UserResponse>(this.apiUrl + ownerId)
   }
 
 }

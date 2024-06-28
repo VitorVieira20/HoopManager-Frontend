@@ -8,15 +8,24 @@ import { CreateTeamComponent } from './pages/team/create-team/create-team.compon
 import { EditTeamComponent } from './pages/team/edit-team/edit-team.component';
 import { PlayersDahshboardComponent } from './pages/player/players-dahshboard/players-dahshboard.component';
 import { PlayersCreateComponent } from './pages/player/players-create/players-create.component';
+import { ClubDashboardComponent } from './pages/club/club-dashboard/club-dashboard.component';
 
 export const routes: Routes = [
     {
-        path: "dashboard/:owner_id",
-        component: DashboardComponent
-    },
-    {
-        path: "contacts/:club_id",
-        component: ContactsComponent
+        path: 'dashboard/:owner_id',
+        component: DashboardComponent,
+        children: [
+          { path: 'clubs', component: ClubDashboardComponent },
+          { path: 'teams', component: TeamDashboardComponent },
+          { path: 'teams/:club_id', component: TeamDashboardComponent },
+          { path: 'teams/create-team/:club_id', component: CreateTeamComponent },
+          { path: 'teams/edit-team/:team_id', component: EditTeamComponent },
+          { path: 'players', component: PlayersDahshboardComponent },
+          { path: 'players/:team_id', component: PlayersDahshboardComponent },
+          { path: 'players/create-player/:team_id', component: PlayersCreateComponent },
+          { path: 'contacts', component: ContactsComponent },
+          { path: 'contacts/:club_id', component: ContactsComponent },
+        ]
     },
     {
         path: "club/create-club/:owner_id",
