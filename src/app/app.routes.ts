@@ -9,6 +9,7 @@ import { EditTeamComponent } from './pages/team/edit-team/edit-team.component';
 import { PlayersDahshboardComponent } from './pages/player/players-dahshboard/players-dahshboard.component';
 import { PlayersCreateComponent } from './pages/player/players-create/players-create.component';
 import { ClubDashboardComponent } from './pages/club/club-dashboard/club-dashboard.component';
+import { PlayersEditComponent } from './pages/player/players-edit/players-edit.component';
 
 export const routes: Routes = [
     {
@@ -24,6 +25,7 @@ export const routes: Routes = [
           { path: 'players', component: PlayersDahshboardComponent },
           { path: 'players/:team_id', component: PlayersDahshboardComponent },
           { path: 'players/create-player/:team_id', component: PlayersCreateComponent },
+          { path: 'players/edit-player/:player_id', component: PlayersEditComponent },
           { path: 'contacts', component: ContactsComponent },
           { path: 'contacts/:club_id', component: ContactsComponent },
         ]

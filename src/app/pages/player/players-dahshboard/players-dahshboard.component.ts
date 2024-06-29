@@ -140,7 +140,7 @@ export class PlayersDahshboardComponent implements OnInit {
   }
 
   onEditPlayer(playerId: string): void {
-    this.router.navigate(['/player/edit-player', playerId])
+    this.router.navigate(['/dashboard', this.ownerId, 'players', 'edit-player', playerId])
   }
 
   goBack(): void {
