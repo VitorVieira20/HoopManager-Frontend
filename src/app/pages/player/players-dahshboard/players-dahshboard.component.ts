@@ -146,4 +146,12 @@ export class PlayersDahshboardComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+
+  hasTeams(): boolean {
+    return this.teams.length > 0;
+  }
+
+  onCreateTeam(): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'teams', 'create-team', this.selectedClubId]);
+  }
 }
