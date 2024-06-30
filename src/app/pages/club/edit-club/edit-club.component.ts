@@ -39,6 +39,7 @@ export class EditClubComponent implements OnInit {
   clubId: string = '';
   club: ClubResponse | null = null;  
   modalRef?: NgbModalRef;
+  returnUrl: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +50,7 @@ export class EditClubComponent implements OnInit {
 
   ngOnInit(): void {
     this.clubId = this.route.snapshot.params['club_id'];
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'dashboard';
     this.editClubForm = new FormGroup<EditClubForm>({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -104,7 +106,13 @@ export class EditClubComponent implements OnInit {
 
       this.clubService.updateClub(this.clubId, clubUpdateRequest).subscribe({
         next: () => {
-          this.router.navigate(['/dashboard', this.club?.owner_id, 'contacts'])
+          if (this.returnUrl === 'contacts') {
+            this.router.navigate(['/dashboard', this.club?.owner_id, 'contacts', this.clubId]);
+          } else if (this.returnUrl === 'club-dashboard') {
+            this.router.navigate(['/dashboard', this.club?.owner_id, 'clubs']);
+          } else {
+            this.router.navigate(['/dashboard', this.club?.owner_id]);
+          }
         },
         error: (err) => console.error('Error updating club', err)
       });

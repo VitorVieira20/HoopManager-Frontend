@@ -71,13 +71,9 @@ export class ContactsComponent implements OnInit {
     });
   }
 
-  onEditClub(): void {
-    this.router.navigate(['/club/edit-club', this.club.id]);
-  }
-
-  goBack(): void {
-    this.location.back();
-  }
+  onEditClub(clubId: string): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'edit-club', clubId], { queryParams: { returnUrl: 'contacts' } });
+  }  
 
   onClubChange(event: any): void {
     const selectedClubId = event.target.value;

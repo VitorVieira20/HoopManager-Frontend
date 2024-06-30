@@ -13,7 +13,7 @@
       <div class="mb-4">
         <div class="flex flex-row">
           <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
-          <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditClub()"></fa-icon>
+          <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditClub(club.id)"></fa-icon>
         </div>
         <p>
           <strong class="text-primary">Email: </strong>
@@ -42,10 +42,7 @@
           </a>
         </p>
       </div>
-      
-      <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="goBack()">
-        Go back
-      </button>
+
     </div>
   </div>
 </div>

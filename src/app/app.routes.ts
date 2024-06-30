@@ -18,6 +18,7 @@ export const routes: Routes = [
         children: [
           { path: 'clubs', component: ClubDashboardComponent },
           { path: 'clubs/create-club', component: CreateClubComponent },
+          { path: 'clubs/edit-club/:club_id', component: EditClubComponent },
           { path: 'teams', component: TeamDashboardComponent },
           { path: 'teams/:club_id', component: TeamDashboardComponent },
           { path: 'teams/create-team/:club_id', component: CreateTeamComponent },

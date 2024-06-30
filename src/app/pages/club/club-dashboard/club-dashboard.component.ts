@@ -5,6 +5,8 @@ import { ClubResponse } from '../../types/club-response';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +15,8 @@ import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CommonModule,
     HttpClientModule,
     RouterModule,
-    NgbModule
+    NgbModule, 
+    FontAwesomeModule
   ],
   providers: [
     ClubService
@@ -27,6 +30,7 @@ export class ClubDashboardComponent implements OnInit {
   clubs: ClubResponse[] = [];
   clubToDelete: ClubResponse | null = null;
   modalRef?: NgbModalRef;
+  faEdit = faEdit;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,6 +68,11 @@ export class ClubDashboardComponent implements OnInit {
     this.modalRef?.close();
     this.onDeleteClub();
   }
+
+  onEditClub(clubId: string): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'edit-club', clubId], { queryParams: { returnUrl: 'club-dashboard' } });
+  }
+  
 
   onDeleteClub() : void {
     if (this.clubToDelete) {
