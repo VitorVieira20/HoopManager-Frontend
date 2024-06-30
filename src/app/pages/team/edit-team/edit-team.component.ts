@@ -5,11 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TeamService } from '../../../services/team/team.service';
-import { TeamRequest } from '../../types/team-request';
 import { TeamUpdateRequest } from '../../types/team-update-request';
 import { TeamResponse } from '../../types/team-response';
-import { ClubResponse } from '../../types/club-response';
-import { ClubService } from '../../../services/club/club.service';
 
 interface EditTeamForm {
   name: FormControl<string | null>
@@ -26,8 +23,7 @@ interface EditTeamForm {
     NgbModule
   ],
   providers: [
-    TeamService,
-    ClubService
+    TeamService
   ],
   templateUrl: './edit-team.component.html',
   styleUrl: './edit-team.component.scss'
@@ -40,7 +36,6 @@ export class EditTeamComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router, 
     private teamService: TeamService,
-    private clubService: ClubService,
     private modalService: NgbModal
   ) {
     this.editTeamForm = new FormGroup<EditTeamForm>({
@@ -49,13 +44,12 @@ export class EditTeamComponent implements OnInit {
   }
 
   ownerId: string = '';
-  clubId: string = '';
   teamId: string = '';
-  team: TeamResponse | null = null;  
-  club: ClubResponse | null = null;
+  team: TeamResponse | null = null;
   modalRef?: NgbModalRef;
 
   ngOnInit(): void {
+    this.ownerId = this.route.parent?.snapshot.params['owner_id'];
     this.teamId = this.route.snapshot.params['team_id'];
     this.loadTeamInfo();
   }
@@ -91,13 +85,8 @@ export class EditTeamComponent implements OnInit {
         name: this.editTeamForm.value.name || '',
       };
 
-      this.clubService.getClubByTeamId(this.teamId).subscribe({
-        next: (data) => this.club = data,
-        error: (err) => console.error('Error loading club information', err)
-      })
-
       this.teamService.updateTeam(this.teamId, teamUpdateRequest).subscribe({
-        next: () => { this.router.navigate(['/dashboard', this.club?.owner_id, 'teams', this.club?.id]) },
+        next: () => { this.router.navigate(['/dashboard', this.ownerId, 'teams', this.team?.club_id]) },
         error: (err) => console.error('Error updating club', err)
       });
     }

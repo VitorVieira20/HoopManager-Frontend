@@ -21,10 +21,6 @@ export class ClubService {
     return this.httpClient.get<ClubResponse>(this.apiUrl + clubId)
   }
 
-  getClubByTeamId(teamId: string) {
-    return this.httpClient.get<ClubResponse>(this.apiUrl + "team/" + teamId)
-  }
-
   createClub(clubRequest: ClubRequest) {
     return this.httpClient.post<ClubRequest>(this.apiUrl, clubRequest);
   }
