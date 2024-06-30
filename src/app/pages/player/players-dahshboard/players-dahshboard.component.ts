@@ -129,14 +129,14 @@ export class PlayersDahshboardComponent implements OnInit {
   }
 
   onDeletePlayer() : void {
-    /*if (this.selectedPlayer)
+    if (this.selectedPlayer)
       this.playerService.deletePlayer(this.selectedPlayer.id).subscribe({
         next: () => {
           this.players = this.players.filter(player => player.id !== this.selectedPlayer!.id);
           this.modalRef?.close();
         },
         error: (err) => console.error('Error deleting player', err)
-      });*/
+      });
   }
 
   onEditPlayer(playerId: string): void {
