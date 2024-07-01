@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerService } from '../../../services/player/player.service';
 import { PlayerResponse } from '../../types/player-response';
-import { Location } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ClubService } from '../../../services/club/club.service';
@@ -53,7 +52,6 @@ export class PlayersDahshboardComponent implements OnInit {
     private clubService: ClubService,
     private teamService: TeamService,
     private router: Router,
-    private location: Location,
     private modalService: NgbModal
   ) {}
 
@@ -68,10 +66,24 @@ export class PlayersDahshboardComponent implements OnInit {
     this.clubService.getClubsByOwnerId(this.ownerId).subscribe({
       next: (data) => {
         this.clubs = data;
-        this.selectedClubId = this.clubId ? this.clubId : this.clubs[0]?.id;
-        this.loadTeams();
+        if (this.teamId) {
+          this.setClubAndLoadTeams();
+        } else {
+          this.selectedClubId = this.clubs[0]?.id;
+          this.loadTeams();
+        }
       },
       error: (err) => console.error('Error loading clubs', err)
+    });
+  }
+
+  setClubAndLoadTeams(): void {
+    this.teamService.getTeamById(this.teamId).subscribe({
+      next: (team) => {
+        this.selectedClubId = team.club_id;
+        this.loadTeams();
+      },
+      error: (err) => console.error('Error getting team by ID', err)
     });
   }
 
@@ -79,7 +91,7 @@ export class PlayersDahshboardComponent implements OnInit {
     this.teamService.getTeamsByClubId(this.selectedClubId).subscribe({
       next: (data) => {
         this.teams = data;
-        this.selectedTeamId = this.teamId ? this.teamId : this.teams[0]?.id;
+        this.selectedTeamId = this.teamId && this.teams.some(team => team.id === this.teamId) ? this.teamId : this.teams[0]?.id;
         this.loadPlayers();
       },
       error: (err) => console.error('Error loading teams', err)
@@ -101,6 +113,7 @@ export class PlayersDahshboardComponent implements OnInit {
     this.selectedClubId = event.target.value;
     this.teams = [];
     this.players = [];
+    this.teamId = '';
     this.loadTeams();
   }
 
@@ -141,10 +154,6 @@ export class PlayersDahshboardComponent implements OnInit {
 
   onEditPlayer(playerId: string): void {
     this.router.navigate(['/dashboard', this.ownerId, 'players', 'edit-player', playerId])
-  }
-
-  goBack(): void {
-    this.location.back();
   }
 
   hasTeams(): boolean {
