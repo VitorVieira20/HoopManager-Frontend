@@ -21,9 +21,9 @@
             </div>
             <div class="flex flex-wrap space-x-2">
               <a [routerLink]="['/dashboard', ownerId, 'players', team.id]" class="mt-4 ml-2 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
-                View Players
+                View Athletes
               </a>
-              <a [routerLink]="['/', team.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+              <a [routerLink]="['/dashboard', ownerId, 'games', team.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
                 View Games
               </a>
               <a [routerLink]="['/', team.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">

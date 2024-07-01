@@ -10,6 +10,9 @@ import { PlayersDahshboardComponent } from './pages/player/players-dahshboard/pl
 import { PlayersCreateComponent } from './pages/player/players-create/players-create.component';
 import { ClubDashboardComponent } from './pages/club/club-dashboard/club-dashboard.component';
 import { PlayersEditComponent } from './pages/player/players-edit/players-edit.component';
+import { GamesDashboardComponent } from './pages/game/games-dashboard/games-dashboard.component';
+import { GamesCreateComponent } from './pages/game/games-create/games-create.component';
+import { GamesEditComponent } from './pages/game/games-edit/games-edit.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +30,10 @@ export const routes: Routes = [
           { path: 'players/:team_id', component: PlayersDahshboardComponent },
           { path: 'players/create-player/:team_id', component: PlayersCreateComponent },
           { path: 'players/edit-player/:player_id', component: PlayersEditComponent },
+          { path: 'games', component: GamesDashboardComponent },
+          { path: 'games/:team_id', component: GamesDashboardComponent },
+          { path: 'games/create-game/:team_id', component: GamesCreateComponent },
+          { path: 'games/edit-game/:game_id', component: GamesEditComponent },
           { path: 'contacts', component: ContactsComponent },
           { path: 'contacts/:club_id', component: ContactsComponent },
         ]

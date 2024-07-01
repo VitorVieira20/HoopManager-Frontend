@@ -1,0 +1,88 @@
+<div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
+    <div class="w-full max-w-4xl bg-white rounded-lg shadow-lg p-6">
+          <h1 class="text-3xl font-bold text-center mb-4 text-secondary">Add Athlete</h1>
+  
+          <form [formGroup]="createGameForm" (ngSubmit)="openConfirmationModal(confirmTemplate)">
+            <div class="mb-4">
+              <label class="block text-textsecondary font-semibold mb-2" for="home_team">Home team</label>
+              <input id="home_team" formControlName="home_team" type="text" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+              <div *ngIf="createGameForm.get('home_team')?.invalid && (createGameForm.get('home_team')?.dirty || createGameForm.get('home_team')?.touched)" class="text-red-600">
+                <div *ngIf="createGameForm.get('home_team')?.errors?.['required']">Home team is required.</div>
+                <div *ngIf="createGameForm.get('home_team')?.errors?.['minlength']">Home team must be at least 3 characters long.</div>
+              </div>
+            </div>
+          
+            <div class="mb-4">
+              <label class="block text-textsecondary font-semibold mb-2" for="away_team">Away team</label>
+              <input id="away_team" formControlName="away_team" type="text" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+              <div *ngIf="createGameForm.get('away_team')?.invalid && (createGameForm.get('away_team')?.dirty || createGameForm.get('away_team')?.touched)" class="text-red-600">
+                <div *ngIf="createGameForm.get('away_team')?.errors?.['required']">Away team is required.</div>
+                <div *ngIf="createGameForm.get('away_team')?.errors?.['minlength']">Away team must be at least 3 characters long.</div>
+              </div>
+            </div>
+          
+            <div class="mb-4">
+              <label class="block text-textsecondary font-semibold mb-2" for="home_score">Home score</label>
+              <input id="home_score" formControlName="home_score" type="number" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+            </div>
+          
+            <div class="mb-4">
+              <label class="block text-textsecondary font-semibold mb-2" for="away_score">Away score</label>
+              <input id="away_score" formControlName="away_score" type="number" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+            </div>
+          
+            <div class="mb-4">
+              <label class="block text-textsecondary font-semibold mb-2" for="location">Location</label>
+              <input id="location" formControlName="location" type="text" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+            </div>
+          
+            <div class="mb-4">
+              <label class="block text-textsecondary font-semibold mb-2" for="date">Date</label>
+              <input id="date" formControlName="date" type="date" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-primary" />
+              <div *ngIf="createGameForm.get('date')?.invalid && (createGameForm.get('date')?.dirty || createGameForm.get('date')?.touched)" class="text-red-600">
+                <div *ngIf="createGameForm.get('date')?.errors?.['required']">Date is required.</div>
+              </div>
+            </div>
+          
+            <div class="text-center">
+              <button type="submit" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">
+                Create Game
+              </button>
+            </div>
+          </form>
+          
+      </div>
+  </div>
+  
+    
+  
+  <!-- Confirmation Modal Template -->
+  <ng-template #confirmTemplate let-modal>
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <div class="modal-header flex justify-between items-center border-b border-gray-200 pb-3">
+          <h4 class="modal-title text-lg font-semibold text-gray-800">Confirm Athlete Informations</h4>
+          <button type="button" class="text-gray-400 hover:text-gray-600" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body py-4">
+          <p class="text-gray-700">Are you sure you want to save these game information?</p>
+          <div class="mt-4 space-y-2 text-gray-600">
+            <p><span class="font-semibold">Home team:</span> {{createGameForm.value.home_team}}</p>
+            <p><span class="font-semibold">Away team:</span> {{createGameForm.value.away_team}}</p>
+            <p><span class="font-semibold">Home score:</span> {{createGameForm.value.home_score}}</p>
+            <p><span class="font-semibold">Away score:</span> {{createGameForm.value.away_score}}</p>
+            <p><span class="font-semibold">Location:</span> {{createGameForm.value.location}}</p>
+            <p><span class="font-semibold">Date:</span> {{createGameForm.value.date}}</p>
+          </div>
+        </div>
+        <div class="modal-footer flex justify-end border-t border-gray-200 pt-3">
+          <button type="button" class="bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mr-2" (click)="declineCreation()">No</button>
+          <button type="button" class="bg-button_primary_color text-white hover:bg-button_primary_hover px-4 py-2 rounded" (click)="confirmCreation()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>

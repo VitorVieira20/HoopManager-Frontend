@@ -13,8 +13,8 @@ export class ClubService {
 
   apiUrl: string = "http://localhost:8081/api/club/";
 
-  getClubsByOwnerId(owenerId: string){
-    return this.httpClient.get<ClubResponse[]>(this.apiUrl + "owner/" + owenerId)
+  getClubsByOwnerId(ownerId: string){
+    return this.httpClient.get<ClubResponse[]>(this.apiUrl + "owner/" + ownerId)
   }
 
   getClubById(clubId: string){
