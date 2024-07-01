@@ -40,8 +40,12 @@ export class GamesDashboardComponent implements OnInit {
   clubs: ClubResponse[] = [];
   teams: TeamResponse[] = [];
   games: GameResponse[] = [];
+  filteredGames: GameResponse[] = [];
   selectedClubId: string = '';
   selectedTeamId: string = '';
+  selectedSort: string = 'date-asc';
+  locationFilter: string = '';
+  nameFilter = '';
   selectedGame: GameResponse | null = null;
   modalRef?: NgbModalRef;
   faEdit = faEdit;
@@ -51,9 +55,8 @@ export class GamesDashboardComponent implements OnInit {
     private gameService: GameService,
     private clubService: ClubService,
     private teamService: TeamService,
-    private router: Router,
-    private modalService: NgbModal
-  ) {}
+    private modalService: NgbModal,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.ownerId = this.route.parent?.snapshot.params['owner_id'];
@@ -62,101 +65,98 @@ export class GamesDashboardComponent implements OnInit {
   }
 
   loadClubs(): void {
-    this.clubService.getClubsByOwnerId(this.ownerId).subscribe({
-      next: (data) => {
-        this.clubs = data;
-        if (this.teamId) {
-          this.setClubAndLoadTeams();
-        } else {
-          this.selectedClubId = this.clubs[0]?.id;
-          this.loadTeams();
-        }
-      },
-      error: (err) => console.error('Error loading clubs', err)
-    });
-  }
-
-  setClubAndLoadTeams(): void {
-    this.teamService.getTeamById(this.teamId).subscribe({
-      next: (team) => {
-        this.selectedClubId = team.club_id;
+    this.clubService.getClubsByOwnerId(this.ownerId).subscribe((clubs: ClubResponse[]) => {
+      this.clubs = clubs;
+      if (this.clubs.length > 0) {
+        this.selectedClubId = this.clubs[0].id;
         this.loadTeams();
-      },
-      error: (err) => console.error('Error getting team by ID', err)
+      }
     });
   }
 
   loadTeams(): void {
-    this.teamService.getTeamsByClubId(this.selectedClubId).subscribe({
-      next: (data) => {
-        this.teams = data;
-        this.selectedTeamId = this.teamId && this.teams.some(team => team.id === this.teamId) ? this.teamId : this.teams[0]?.id;
-        this.loadGames();
-      },
-      error: (err) => console.error('Error loading teams', err)
-    });
+    if (this.selectedClubId) {
+      this.teamService.getTeamsByClubId(this.selectedClubId).subscribe((teams: TeamResponse[]) => {
+        this.teams = teams;
+        if (this.teams.length > 0) {
+          this.selectedTeamId = this.teams[0].id;
+          this.loadGames();
+        }
+      });
+    }
   }
 
   loadGames(): void {
-    if (!this.selectedTeamId) {
-      this.games = [];
-      return;
+    if (this.selectedTeamId) {
+      this.gameService.getGamesByTeamId(this.selectedTeamId).subscribe((games: GameResponse[]) => {
+        this.games = games;
+        this.applyFilters();
+      });
     }
-    this.gameService.getGamesByTeamId(this.selectedTeamId).subscribe({
-      next: (data) => this.games = data,
-      error: (err) => console.error('Error loading games', err)
-    });
   }
 
   onClubChange(event: any): void {
     this.selectedClubId = event.target.value;
-    this.teams = [];
-    this.games = [];
-    this.teamId = '';
     this.loadTeams();
   }
 
   onTeamChange(event: any): void {
     this.selectedTeamId = event.target.value;
-    this.games = [];
     this.loadGames();
   }
 
-  onCreateGame(): void {
-    this.router.navigate(['/dashboard', this.ownerId, 'games', 'create-game', this.selectedTeamId]);
+  onSortChange(event: any): void {
+    this.selectedSort = event.target.value;
+    this.applyFilters();
   }
 
-  openDeleteModal(content: TemplateRef<any>, game: GameResponse): void {
+  onLocationFilterChange(event: any): void {
+    this.locationFilter = event.target.value;
+    this.applyFilters();
+  }
+
+  onNameFilterChange(event: any) {
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    this.filteredGames = this.games.filter(game => {
+      const matchesLocation = game.location.toLowerCase().includes(this.locationFilter.toLowerCase());
+      const matchesName = game.home_team.toLowerCase().includes(this.nameFilter.toLowerCase()) || game.away_team.toLowerCase().includes(this.nameFilter.toLowerCase());
+      return matchesLocation && matchesName;
+    });
+
+    if (this.selectedSort === 'date-asc') {
+      this.filteredGames.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    } else {
+      this.filteredGames.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+  }
+
+  onCreateGame(): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'createGame']);
+  }
+
+  onEditGame(gameId: string): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'editGame', gameId]);
+  }
+
+  openDeleteModal(deleteModal: TemplateRef<any>, game: GameResponse): void {
     this.selectedGame = game;
-    this.modalRef = this.modalService.open(content);
+    this.modalRef = this.modalService.open(deleteModal);
+  }
+
+  confirmDelete(): void {
+    if (this.selectedGame) {
+      this.gameService.deleteGame(this.selectedGame.id).subscribe(() => {
+        this.loadGames();
+        this.modalRef?.close();
+      });
+    }
   }
 
   declineDelete(): void {
     this.modalRef?.close();
-  }
-
-  confirmDelete(): void {
-    this.modalRef?.close();
-    this.onDeleteGame();
-  }
-
-  onDeleteGame() : void {
-    if (this.selectedGame)
-      this.gameService.deleteGame(this.selectedGame.id).subscribe({
-        next: () => {
-          this.games = this.games.filter(game => game.id !== this.selectedGame!.id);
-          this.modalRef?.close();
-        },
-        error: (err) => console.error('Error deleting game', err)
-      });
-  }
-
-  onEditGame(gameId: string): void {
-    this.router.navigate(['/dashboard', this.ownerId, 'games', 'edit-game', gameId])
-  }
-
-  hasTeams(): boolean {
-    return this.teams.length > 0;
   }
 
   onCreateTeam(): void {
@@ -175,5 +175,9 @@ export class GamesDashboardComponent implements OnInit {
     const gameDate = new Date(date);
     const today = new Date();
     return gameDate < today;
+  }
+
+  hasTeams(): boolean {
+    return this.teams.length > 0;
   }
 }

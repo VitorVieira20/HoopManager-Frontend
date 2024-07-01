@@ -1,93 +1,115 @@
 <div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
-    <div class="w-full max-w-4xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
-  
-      <div class="mb-4">
-        <label for="club-select" class="block text-textsecondary font-semibold mb-2">Select Club:</label>
-        <select id="club-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedClubId" (change)="onClubChange($event)">
-          <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
+  <div class="w-full max-w-4xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
+
+    <div class="mb-4">
+      <label for="club-select" class="block text-textsecondary font-semibold mb-2">Select Club:</label>
+      <select id="club-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedClubId" (change)="onClubChange($event)">
+        <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
+      </select>
+    </div>
+
+    <div class="mb-4" *ngIf="teams.length > 0">
+      <label for="team-select" class="block text-textsecondary font-semibold mb-2">Select Team:</label>
+      <select id="team-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedTeamId" (change)="onTeamChange($event)">
+        <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
+      </select>
+    </div>
+
+    <div class="mb-4 flex space-x-4">
+      <div>
+        <label for="sort-select" class="block text-textsecondary font-semibold mb-2">Sort by:</label>
+        <select id="sort-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedSort" (change)="onSortChange($event)">
+          <option value="date-asc">Date (Asc)</option>
+          <option value="date-desc">Date (Desc)</option>
         </select>
       </div>
-  
-      <div class="mb-4" *ngIf="teams.length > 0">
-        <label for="team-select" class="block text-textsecondary font-semibold mb-2">Select Team:</label>
-        <select id="team-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedTeamId" (change)="onTeamChange($event)">
-          <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
-        </select>
+      <div>
+        <label for="location-filter" class="block text-textsecondary font-semibold mb-2">Filter by Location:</label>
+        <input id="location-filter" type="text" class="w-full p-2 border rounded-md" [(ngModel)]="locationFilter" (input)="onLocationFilterChange($event)" />
       </div>
-  
-      <ng-container *ngIf="games.length > 0; else noGamesTemplate">
-        <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
-          <h2 class="text-2xl font-semibold text-primary mb-4">Games:</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
-            <div *ngFor="let game of games" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
-              <div class="mb-4">
-                <div class="flex flex-row">
-                  <h2 class="text-2xl font-semibold text-textsecondary mb-4">{{ game.home_team }} vs {{ game.away_team }}</h2>
-                  <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditGame(game.id)"></fa-icon>
-                </div>
+      <div>
+        <label for="name-filter" class="block text-textsecondary font-semibold mb-2">Filter by Name:</label>
+        <input id="name-filter" type="text" class="w-full p-2 border rounded-md" [(ngModel)]="nameFilter" (input)="onNameFilterChange($event)" />
+      </div>
+    </div>
+
+    <ng-container *ngIf="filteredGames.length > 0; else noGamesTemplate">
+      <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-primary mb-4">Games:</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+          <div *ngFor="let game of filteredGames" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+            <div class="mb-4">
+              <div class="flex justify-between">
+                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.home_team }}</h2>
+                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.away_team }}</h2>
+              </div>
+              <div *ngIf="hasGameHappened(game.date)" class="flex justify-between">
+                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.home_score }}</h2>
+                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.away_score }}</h2>
+              </div>
+              <div class="flex justify-center flex-col items-center">
                 <p class="text font-medium text-textsecondary">Date: {{ formatDate(game.date) }}</p>
                 <p class="text font-medium text-textsecondary">Location: {{ game.location }}</p>
-                <p *ngIf="hasGameHappened(game.date)" class="text font-medium text-textsecondary">Score: {{ game.home_score }} - {{ game.away_score }}</p>
-              </div>
-              <div class="flex flex-wrap space-x-2">
-                <a *ngIf="hasGameHappened(game.date)" [routerLink]="['/dashboard', ownerId, 'gameInfo']" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
-                  Game Info
-                </a>
-                <button (click)="openDeleteModal(deleteModal, game)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">
-                  Delete Game
-                </button>
               </div>
             </div>
+            <div class="flex flex-wrap space-x-2">
+              <a *ngIf="hasGameHappened(game.date)" [routerLink]="['/dashboard', ownerId, 'gameInfo']" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                Game Info
+              </a>
+              <button (click)="openDeleteModal(deleteModal, game)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">
+                Delete Game
+              </button>
+            </div>
           </div>
-          <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateGame()">
-            Create Game
+        </div>
+        <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateGame()">
+          Create Game
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #noGamesTemplate>
+      <div class="text-center" *ngIf="hasTeams(); else noTeamsTemplate">
+        <h2 class="text-2xl font-semibold mb-4 text-text">No Games Found</h2>
+        <p class="text-text mb-4">You don't have any games yet. Click the button below to create your games.</p>
+        <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateGame()">
+          Create Game
+        </button>
+      </div>
+
+      <ng-template #noTeamsTemplate>
+        <div class="text-center">
+          <h2 class="text-2xl font-semibold mb-4 text-text">No Teams Available</h2>
+          <p class="text-text mb-4">You need to create a team before adding games.</p>
+          <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateTeam()">
+            Create Team
           </button>
         </div>
-      </ng-container>
-  
-      <ng-template #noGamesTemplate>
-        <div class="text-center" *ngIf="hasTeams(); else noTeamsTemplate">
-          <h2 class="text-2xl font-semibold mb-4 text-text">No Games Found</h2>
-          <p class="text-text mb-4">You don't have any games yet. Click the button below to create your games.</p>
-          <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateGame()">
-            Create Game
-          </button>
-        </div>
-  
-        <ng-template #noTeamsTemplate>
-          <div class="text-center">
-            <h2 class="text-2xl font-semibold mb-4 text-text">No Teams Available</h2>
-            <p class="text-text mb-4">You need to create a team before adding games.</p>
-            <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateTeam()">
-              Create Team
-            </button>
-          </div>
-        </ng-template>
       </ng-template>
-  
-    </div>
+    </ng-template>
+
   </div>
-  
-  <!-- Delete Game Confirmation Modal -->
-  <ng-template #deleteModal let-modal>
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-        <div class="modal-header flex justify-between items-center border-b border-gray-200 pb-3">
-          <h4 class="modal-title text-lg font-semibold text-gray-800">Confirm Delete</h4>
-          <button type="button" class="text-gray-400 hover:text-gray-600" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-        <div class="modal-body py-4">
-          <p class="text-gray-700">Are you sure you want to delete this game?</p>
-        </div>
-        <div class="modal-footer flex justify-end border-t border-gray-200 pt-3">
-          <button type="button" class="bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mr-2" (click)="declineDelete()">No</button>
-          <button type="button" class="bg-button_primary_color text-white hover:bg-button_primary_hover px-4 py-2 rounded" (click)="confirmDelete()">Yes</button>
-        </div>
+</div>
+
+<!-- Delete Game Confirmation Modal -->
+<ng-template #deleteModal let-modal>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+      <div class="modal-header flex justify-between items-center border-b border-gray-200 pb-3">
+        <h4 class="modal-title text-lg font-semibold text-gray-800">Confirm Delete</h4>
+        <button type="button" class="text-gray-400 hover:text-gray-600" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body py-4">
+        <p class="text-gray-700">Are you sure you want to delete this game?</p>
+      </div>
+      <div class="modal-footer flex justify-end border-t border-gray-200 pt-3">
+        <button type="button" class="bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mr-2" (click)="declineDelete()">No</button>
+        <button type="button" class="bg-button_primary_color text-white hover:bg-button_primary_hover px-4 py-2 rounded" (click)="confirmDelete()">Yes</button>
       </div>
     </div>
-  </ng-template>
-  
+  </div>
+</ng-template>
