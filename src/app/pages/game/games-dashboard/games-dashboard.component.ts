@@ -67,7 +67,9 @@ export class GamesDashboardComponent implements OnInit {
   loadClubs(): void {
     this.clubService.getClubsByOwnerId(this.ownerId).subscribe((clubs: ClubResponse[]) => {
       this.clubs = clubs;
-      if (this.clubs.length > 0) {
+      if (this.teamId) {
+        this.loadTeamsByTeamId(this.teamId);
+      } else if (this.clubs.length > 0) {
         this.selectedClubId = this.clubs[0].id;
         this.loadTeams();
       }
@@ -86,6 +88,22 @@ export class GamesDashboardComponent implements OnInit {
     }
   }
 
+  loadTeamsByTeamId(teamId: string): void {
+    this.teamService.getTeamById(teamId).subscribe((team: TeamResponse) => {
+      this.selectedClubId = team.club_id;
+      this.selectedTeamId = team.id;
+      this.loadTeamsForClubAndSelectTeam(this.selectedClubId, teamId);
+    });
+  }
+
+  loadTeamsForClubAndSelectTeam(clubId: string, teamId: string): void {
+    this.teamService.getTeamsByClubId(clubId).subscribe((teams: TeamResponse[]) => {
+      this.teams = teams;
+      this.selectedTeamId = teamId;
+      this.loadGames();
+    });
+  }
+
   loadGames(): void {
     if (this.selectedTeamId) {
       this.gameService.getGamesByTeamId(this.selectedTeamId).subscribe((games: GameResponse[]) => {
@@ -97,11 +115,15 @@ export class GamesDashboardComponent implements OnInit {
 
   onClubChange(event: any): void {
     this.selectedClubId = event.target.value;
+    this.teamId = '';
+    this.teams = [];
+    this.filteredGames = [];
     this.loadTeams();
   }
 
   onTeamChange(event: any): void {
     this.selectedTeamId = event.target.value;
+    this.filteredGames = [];
     this.loadGames();
   }
 
@@ -134,11 +156,11 @@ export class GamesDashboardComponent implements OnInit {
   }
 
   onCreateGame(): void {
-    this.router.navigate(['/dashboard', this.ownerId, 'createGame']);
+    this.router.navigate(['/dashboard', this.ownerId, 'games', 'create-game', this.selectedTeamId]);
   }
 
   onEditGame(gameId: string): void {
-    this.router.navigate(['/dashboard', this.ownerId, 'editGame', gameId]);
+    this.router.navigate(['/dashboard', this.ownerId, 'games', 'edit-game', gameId]);
   }
 
   openDeleteModal(deleteModal: TemplateRef<any>, game: GameResponse): void {

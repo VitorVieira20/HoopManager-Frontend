@@ -53,7 +53,7 @@
               </div>
             </div>
             <div class="flex flex-wrap space-x-2">
-              <a *ngIf="hasGameHappened(game.date)" [routerLink]="['/dashboard', ownerId, 'gameInfo']" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+              <a *ngIf="hasGameHappened(game.date)" [routerLink]="['/dashboard', ownerId, 'gamesInfo', game.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
                 Game Info
               </a>
               <button (click)="openDeleteModal(deleteModal, game)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">
@@ -81,7 +81,7 @@
         <div class="text-center">
           <h2 class="text-2xl font-semibold mb-4 text-text">No Teams Available</h2>
           <p class="text-text mb-4">You need to create a team before adding games.</p>
-          <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateTeam()">
+          <button class="mt-10 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateTeam()">
             Create Team
           </button>
         </div>

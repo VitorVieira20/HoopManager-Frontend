@@ -17,6 +17,14 @@ export class PlayerService {
     return this.httpClient.get<PlayerResponse[]>(this.apiUrl + "team/" + teamId)
   }
 
+  getPlayersByGameId(gameId: string){
+    return this.httpClient.get<PlayerResponse[]>(this.apiUrl + "game/" + gameId)
+  }
+
+  getRemainingPlayersFromGameInfoByGameId(gameId: string){
+    return this.httpClient.get<PlayerResponse[]>(this.apiUrl + "gameInfo/" + gameId)
+  }
+
   getPlayerById(playerId: string) {
     return this.httpClient.get<PlayerResponse>(this.apiUrl + playerId)
   }

@@ -1,0 +1,37 @@
+<div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold text-primary mb-4">Add Game Info:</h2>
+    <div *ngIf="players.length > 0; else noPlayers">
+        <p class="mb-4 text text-gray-600">
+            <span class="text-red-600">Note:</span> Please fill in only the fields for the players you wish to update.
+        </p>
+        <form (ngSubmit)="onSubmit()">
+            <div *ngFor="let player of players" class="mb-4 p-4 border border-gray-300 rounded-lg">
+                <h3 class="text-xl font-semibold text-textsecondary mb-2">{{ player.name }}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="points-{{ player.id }}" class="block text-sm font-medium text-gray-700">Points</label>
+                        <input id="points-{{ player.id }}" name="points-{{ player.id }}" type="number" class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" [(ngModel)]="player.points">
+                    </div>
+                    <div>
+                        <label for="assists-{{ player.id }}" class="block text-sm font-medium text-gray-700">Assists</label>
+                        <input id="assists-{{ player.id }}" name="assists-{{ player.id }}" type="number" class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" [(ngModel)]="player.assists">
+                    </div>
+                    <div>
+                        <label for="rebounds-{{ player.id }}" class="block text-sm font-medium text-gray-700">Rebounds</label>
+                        <input id="rebounds-{{ player.id }}" name="rebounds-{{ player.id }}" type="number" class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" [(ngModel)]="player.rebounds">
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row mt-4">
+                <button type="submit" class="flex-1 mx-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">Submit</button>
+                <button (click)="goBack()" class="flex-1 mx-4 px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700">Back to Games</button>
+            </div>
+        </form>
+    </div>
+    <ng-template #noPlayers>
+        <p class="text-red-600">All players already have game data or there are no players available.</p>
+        <div class="flex flex-row mt-4">
+            <button (click)="goBack()" class="flex-1 mx-4 px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700">Back to Games</button>
+        </div>
+    </ng-template>
+</div>

@@ -13,6 +13,8 @@ import { PlayersEditComponent } from './pages/player/players-edit/players-edit.c
 import { GamesDashboardComponent } from './pages/game/games-dashboard/games-dashboard.component';
 import { GamesCreateComponent } from './pages/game/games-create/games-create.component';
 import { GamesEditComponent } from './pages/game/games-edit/games-edit.component';
+import { GameInfoDashboardComponent } from './pages/gameInfo/game-info-dashboard/game-info-dashboard.component';
+import { GameInfoCreateComponent } from './pages/gameInfo/game-info-create/game-info-create.component';
 
 export const routes: Routes = [
     {
@@ -34,6 +36,8 @@ export const routes: Routes = [
           { path: 'games/:team_id', component: GamesDashboardComponent },
           { path: 'games/create-game/:team_id', component: GamesCreateComponent },
           { path: 'games/edit-game/:game_id', component: GamesEditComponent },
+          { path: 'gamesInfo/:game_id', component: GameInfoDashboardComponent },
+          { path: 'gamesInfo/create-info/:game_id', component: GameInfoCreateComponent },
           { path: 'contacts', component: ContactsComponent },
           { path: 'contacts/:club_id', component: ContactsComponent },
         ]
