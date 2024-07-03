@@ -54,12 +54,16 @@ export class GameInfoCreateComponent implements OnInit {
 
   loadPlayers(): void {
     this.playerService.getRemainingPlayersFromGameInfoByGameId(this.gameId).subscribe({
-      next: (data) => this.players = data ,
+      next: (data) => this.players = data,
       error: (err) => console.error('Error loading game info', err)
     });
   }
 
-  onSubmit(): void {
+  openConfirmModal(confirmTemplate: any): void {
+    this.modalService.open(confirmTemplate, { centered: true });
+  }
+
+  confirmCreation(): void {
     this.players.forEach(player => {
       if (player.points || player.assists || player.rebounds) {
         const gameInfoRequest: GameInfoRequest = {
@@ -68,13 +72,14 @@ export class GameInfoCreateComponent implements OnInit {
           assists: player.assists || 0,
           rebounds: player.rebounds || 0,
           game_id: this.gameId
-        }
+        };
         this.gameInfoService.createGameInfo(gameInfoRequest).subscribe({
           next: () => this.router.navigate(['/dashboard', this.ownerId, 'gamesInfo', this.gameId]),
           error: (err) => console.error('Error creating player stats', err)
         });
       }
     });
+    this.modalService.dismissAll();
   }
 
   goBack(): void {

@@ -4,7 +4,7 @@
         <p class="mb-4 text text-gray-600">
             <span class="text-red-600">Note:</span> Please fill in only the fields for the players you wish to update.
         </p>
-        <form (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="openConfirmModal(confirmTemplate)">
             <div *ngFor="let player of players" class="mb-4 p-4 border border-gray-300 rounded-lg">
                 <h3 class="text-xl font-semibold text-textsecondary mb-2">{{ player.name }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="flex flex-row mt-4">
-                <button type="submit" class="flex-1 mx-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">Submit</button>
+                <button type="button" class="flex-1 mx-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="openConfirmModal(confirmTemplate)">Submit</button>
                 <button (click)="goBack()" class="flex-1 mx-4 px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700">Back to Games</button>
             </div>
         </form>
@@ -35,3 +35,34 @@
         </div>
     </ng-template>
 </div>
+
+<!-- Confirmation Modal Template -->
+<ng-template #confirmTemplate let-modal>
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <div class="modal-header flex justify-between items-center border-b border-gray-200 pb-3">
+                <h4 class="modal-title text-lg font-semibold text-gray-800">Confirm Athlete Information</h4>
+                <button type="button" class="text-gray-400 hover:text-gray-600" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="text-gray-700">Are you sure you want to save these game information?</p>
+                <div class="mt-4 space-y-2 text-gray-600">
+                    <div *ngFor="let player of players">
+                        <p><strong>{{ player.name }}</strong></p>
+                        <p>Points: {{ player.points }}</p>
+                        <p>Assists: {{ player.assists }}</p>
+                        <p>Rebounds: {{ player.rebounds }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer flex justify-end border-t border-gray-200 pt-3">
+                <button type="button" class="bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mr-2" (click)="modal.dismiss('Cross click')">No</button>
+                <button type="button" class="bg-button_primary_color text-white hover:bg-button_primary_hover px-4 py-2 rounded" (click)="confirmCreation()">Yes</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule } from '@angular/forms';
@@ -10,9 +10,6 @@ import { GameService } from '../../../services/game/game.service';
 import { GameInfoResponse } from '../../types/gameInfo-response';
 import { GameInfoService } from '../../../services/gameInfo/game-info.service';
 import { PlayerResponse } from '../../types/player-response';
-import { PlayerService } from '../../../services/player/player.service';
-import { TeamResponse } from '../../types/team-response';
-import { GameResponse } from '../../types/game-response';
 
 @Component({
   selector: 'app-game-info-dashboard',
@@ -39,6 +36,8 @@ export class GameInfoDashboardComponent implements OnInit {
   gameInfo: GameInfoResponse[] = [];
   teamPlayers: PlayerResponse[] = [];
   faEdit = faEdit;
+  selectedGameInfo?: GameInfoResponse
+  modalRef?: NgbModalRef;
 
   constructor(
     private route: ActivatedRoute, 
@@ -61,7 +60,8 @@ export class GameInfoDashboardComponent implements OnInit {
   }
 
   onEditPlayerInfo(infoId: number): void {
-    
+    console.log('/dashboard/' + this.ownerId + '/gamesInfo/edit-info/' + infoId)
+    this.router.navigate(['/dashboard', this.ownerId, 'gamesInfo', 'edit-info', infoId]);
   }
 
   onAddInfo(): void {
@@ -75,4 +75,33 @@ export class GameInfoDashboardComponent implements OnInit {
     })    
   }
 
+  openDeleteModal(deleteModal: TemplateRef<any>, gameInfo: GameInfoResponse): void {
+    this.selectedGameInfo = gameInfo;
+    this.modalRef = this.modalService.open(deleteModal);
+  }
+
+  confirmDelete(): void {
+    if (this.selectedGameInfo) {
+      this.gameInfoService.deleteGameInfo(this.selectedGameInfo.id).subscribe(() => {
+        this.loadGameInfos();
+        this.modalRef?.close();
+      });
+    }
+  }
+
+  declineDelete(): void {
+    this.modalRef?.close();
+  }
+
+  getTotalPoints(): number {
+    return this.gameInfo.reduce((total, info) => total + info.points, 0);
+  }
+
+  getTotalAssists(): number {
+    return this.gameInfo.reduce((total, info) => total + info.assists, 0);
+  }
+
+  getTotalRebounds(): number {
+    return this.gameInfo.reduce((total, info) => total + info.rebounds, 0);
+  }
 }

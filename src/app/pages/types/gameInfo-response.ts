@@ -5,5 +5,5 @@ export type GameInfoResponse = {
     assists: number,
     rebounds: number,
     game_id: string,
-    player_name: string
+    player_name?: string
 }
