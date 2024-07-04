@@ -1,0 +1,18 @@
+<div class="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+    <div class="w-full max-w-md bg-secondary rounded-lg shadow-lg p-6">
+      <h2 class="text-2xl font-semibold text-textsecondary mb-6 text-center">Login</h2>
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label for="email" class="block text-textsecondary font-semibold mb-2">Email</label>
+          <input type="text" id="email" [(ngModel)]="email" name="email" required class="w-full p-2 border rounded-md">
+        </div>
+        <div class="mb-6">
+          <label for="password" class="block text-textsecondary font-semibold mb-2">Password</label>
+          <input type="password" id="password" [(ngModel)]="password" name="password" required class="w-full p-2 border rounded-md">
+        </div>
+        <button type="submit" class="w-full py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">Login</button>
+      </form>
+      <p class="text-center text-textsecondary mt-4">Don't have an account? <a routerLink="/register" class="text-accent hover:underline">Register here</a></p>
+    </div>
+  </div>
+  

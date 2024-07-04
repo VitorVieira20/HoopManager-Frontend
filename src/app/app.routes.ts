@@ -16,11 +16,15 @@ import { GamesEditComponent } from './pages/game/games-edit/games-edit.component
 import { GameInfoDashboardComponent } from './pages/gameInfo/game-info-dashboard/game-info-dashboard.component';
 import { GameInfoCreateComponent } from './pages/gameInfo/game-info-create/game-info-create.component';
 import { GameInfoEditComponent } from './pages/gameInfo/game-info-edit/game-info-edit.component';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { SignupComponent } from './pages/auth/signup/signup.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
         path: 'dashboard/:owner_id',
         component: DashboardComponent,
+        canActivate: [AuthGuard],
         children: [
           { path: 'clubs', component: ClubDashboardComponent },
           { path: 'clubs/create-club', component: CreateClubComponent },
@@ -44,4 +48,6 @@ export const routes: Routes = [
           { path: 'contacts/:club_id', component: ContactsComponent },
         ]
     },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: SignupComponent }
 ];

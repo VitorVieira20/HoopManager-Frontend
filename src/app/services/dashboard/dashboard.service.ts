@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserResponse } from '../../pages/types/user-response';
 
@@ -12,8 +12,13 @@ export class DashboardService {
 
   apiUrl: string = "http://localhost:8081/api/user/";
 
-  getUserById(ownerId: string){
-    return this.httpClient.get<UserResponse>(this.apiUrl + ownerId)
+  getUserById(ownerId: string) {
+    const authToken = sessionStorage.getItem('auth-token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${authToken}`
+    });
+
+    return this.httpClient.get<UserResponse>(this.apiUrl + ownerId, { headers });
   }
 
 }
