@@ -2,47 +2,58 @@
   <div class="w-full max-w-4xl bg-secondary rounded-lg shadow-lg p-6">
     <h1 class="text-3xl font-bold text-center mb-4 text-text">Contacts</h1>
     
-    <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
-      <div *ngIf="clubs.length > 1" class="mb-4">
-        <label for="club-select" class="block text-primary font-semibold mb-2">Select Club:</label>
-        <select id="club-select" class="w-full p-2 border rounded-md" (change)="onClubChange($event)">
-          <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
-        </select>
-      </div>
-      
-      <div class="mb-4">
-        <div class="flex flex-row">
-          <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
-          <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditClub(club.id)"></fa-icon>
+    <ng-container *ngIf="clubs.length > 0; else noClubsTemplate">
+      <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+        <div *ngIf="clubs.length > 1" class="mb-4">
+          <label for="club-select" class="block text-primary font-semibold mb-2">Select Club:</label>
+          <select id="club-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedClubId" (change)="onClubChange($event)">
+            <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
+          </select>
         </div>
-        <p>
-          <strong class="text-primary">Email: </strong>
-          <span class="text-textsecondary">{{ club.email }}</span>
-        </p>
-        <p>
-          <strong class="text-primary">Phone: </strong>
-          <span class="text-textsecondary">{{ club.phone }}</span>
-        </p>
-        <p>
-          <strong class="text-primary">Instagram:</strong>
-          <a [href]="'https://www.instagram.com/' + club.instagram" target="_blank" class="text-accent hover:underline">
-            {{ club.instagram }}
-          </a>
-        </p>
-        <p>
-          <strong class="text-primary">Facebook:</strong>
-          <a [href]="'https://www.facebook.com/' + club.facebook" target="_blank" class="text-accent hover:underline">
-            {{ club.facebook }}
-          </a>
-        </p>
-        <p>
-          <strong class="text-primary">Twitter:</strong>
-          <a [href]="'https://www.twitter.com/' + club.twitter" target="_blank" class="text-accent hover:underline">
-            {{ club.twitter }}
-          </a>
-        </p>
+        
+        <div class="mb-4">
+          <div class="flex flex-row">
+            <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
+            <fa-icon [icon]="faEdit" class="ml-4 mt-1 text-accent cursor-pointer" (click)="onEditClub(club.id)"></fa-icon>
+          </div>
+          <p>
+            <strong class="text-primary">Email: </strong>
+            <span class="text-textsecondary">{{ club.email }}</span>
+          </p>
+          <p>
+            <strong class="text-primary">Phone: </strong>
+            <span class="text-textsecondary">{{ club.phone }}</span>
+          </p>
+          <p>
+            <strong class="text-primary">Instagram:</strong>
+            <a [href]="'https://www.instagram.com/' + club.instagram" target="_blank" class="text-accent hover:underline">
+              {{ club.instagram }}
+            </a>
+          </p>
+          <p>
+            <strong class="text-primary">Facebook:</strong>
+            <a [href]="'https://www.facebook.com/' + club.facebook" target="_blank" class="text-accent hover:underline">
+              {{ club.facebook }}
+            </a>
+          </p>
+          <p>
+            <strong class="text-primary">Twitter:</strong>
+            <a [href]="'https://www.twitter.com/' + club.twitter" target="_blank" class="text-accent hover:underline">
+              {{ club.twitter }}
+            </a>
+          </p>
+        </div>
       </div>
-
-    </div>
+    </ng-container>
+    
+    <ng-template #noClubsTemplate>
+      <div class="text-center">
+        <h2 class="text-2xl font-semibold mb-4 text-text">No Clubs Found</h2>
+        <p class="text-text mb-4">You don't have any clubs yet. Click the button below to create your first club.</p>
+        <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateClub()">
+          Create Club
+        </button>
+      </div>
+    </ng-template>
   </div>
 </div>
