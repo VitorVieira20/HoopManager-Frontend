@@ -2,11 +2,14 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../../services/auth/login.service';
+import { DashboardService } from '../../../services/dashboard/dashboard.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     RouterModule
   ],
@@ -20,13 +23,17 @@ export class LoginComponent {
 
   email: string = '';
   password: string = '';
+  errorMessage: string = '';
 
   constructor(private loginService: LoginService, private router: Router) {}
 
   onSubmit() {
     this.loginService.login(this.email, this.password).subscribe({
-      next: () => console.log("Login feito com sucesso!"),
-      error: () => console.error("Erro inesperado! Tente novamente mais tarde")
+      next: () => this.router.navigate(['/dashboard', sessionStorage.getItem('user-id')]),
+      error: () => {
+        this.errorMessage = "Wrong Credentials";
+        return;
+      }
     })
   }
 }

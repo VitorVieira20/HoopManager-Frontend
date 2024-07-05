@@ -19,12 +19,13 @@ import { GameInfoEditComponent } from './pages/gameInfo/game-info-edit/game-info
 import { LoginComponent } from './pages/auth/login/login.component';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { AuthGuard } from './guards/auth.guard';
+import { OwnerGuard } from './guards/owner.guard';
 
 export const routes: Routes = [
     {
         path: 'dashboard/:owner_id',
         component: DashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, OwnerGuard],
         children: [
           { path: 'clubs', component: ClubDashboardComponent },
           { path: 'clubs/create-club', component: CreateClubComponent },
@@ -49,5 +50,6 @@ export const routes: Routes = [
         ]
     },
     { path: 'login', component: LoginComponent },
-    { path: 'register', component: SignupComponent }
+    { path: 'register', component: SignupComponent },
+    { path: '', component: LoginComponent }
 ];

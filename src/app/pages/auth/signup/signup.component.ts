@@ -29,12 +29,12 @@ export class SignupComponent {
 
   onSubmit() {
     if (this.password !== this.confirmPassword) {
-      this.errorMessage = "Passwords do not match.";
+      this.errorMessage = "Passwords do not match";
       return;
     }
 
     this.signupService.signup(this.username, this.email, this.password).subscribe({
-      next: () => console.log("Login feito com sucesso!"),
+      next: () => this.router.navigate(['/login']),
       error: () => console.error("Erro inesperado! Tente novamente mais tarde")
     });
   }

@@ -10,6 +10,7 @@
           <label for="password" class="block text-textsecondary font-semibold mb-2">Password</label>
           <input type="password" id="password" [(ngModel)]="password" name="password" required class="w-full p-2 border rounded-md">
         </div>
+        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
         <button type="submit" class="w-full py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">Login</button>
       </form>
       <p class="text-center text-textsecondary mt-4">Don't have an account? <a routerLink="/register" class="text-accent hover:underline">Register here</a></p>

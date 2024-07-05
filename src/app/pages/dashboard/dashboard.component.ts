@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, 
     private dashboardService: DashboardService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +40,13 @@ export class DashboardComponent implements OnInit {
       next: (data) => this.user = data,
       error: (err) => console.error('Error loading user', err)
     })
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('auth-token');
+    sessionStorage.removeItem('user-email');
+    sessionStorage.removeItem('user-id');
+    this.router.navigate(['/login']);
   }
   
 }
