@@ -1,0 +1,51 @@
+<div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
+    <div class="w-full max-w-6xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
+      <h1 class="text-3xl font-semibold text-primary mb-6">Dashboard</h1>
+  
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <h2 class="text-xl font-semibold text-textsecondary">Total Clubs</h2>
+          <p class="text-2xl font-bold text-primary">{{ totalClubs }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <h2 class="text-xl font-semibold text-textsecondary">Total Teams</h2>
+          <p class="text-2xl font-bold text-primary">{{ totalTeams }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <h2 class="text-xl font-semibold text-textsecondary">Total Athletes</h2>
+          <p class="text-2xl font-bold text-primary">{{ totalAthletes }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <h2 class="text-xl font-semibold text-textsecondary">Total Games</h2>
+          <p class="text-2xl font-bold text-primary">{{ totalGames }}</p>
+        </div>
+      </div>
+  
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-primary mb-4">Statistics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <h3 class="text-lg font-semibold text-textsecondary">Club with more Teams</h3>
+            <p class="text-xl font-bold text-primary">{{ clubWithMoreTeams }} ({{ maxGames }})</p>
+          </div>
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <h3 class="text-lg font-semibold text-textsecondary">Club with more Games</h3>
+            <p class="text-xl font-bold text-primary">{{ clubWithMoreGames }} ({{ maxTeams }})</p>
+          </div>
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <h3 class="text-lg font-semibold text-textsecondary">Club with more Athletes</h3>
+            <p class="text-xl font-bold text-primary">{{ clubWithMoreAthletes }} ({{ maxAthletes }})</p>
+          </div>
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <h3 class="text-lg font-semibold text-textsecondary">Team with more Games</h3>
+            <p class="text-xl font-bold text-primary">{{ teamWithMoreGames }} ({{ maxTeamGames }}) - {{ teamWithMoreGamesClub }}</p>
+          </div>
+          <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <h3 class="text-lg font-semibold text-textsecondary">Team with more Athletes</h3>
+            <p class="text-xl font-bold text-primary">{{ teamWithMoreAthletes }} ({{ maxTeamAthletes }}) - {{ teamWithMoreAthletesClub }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

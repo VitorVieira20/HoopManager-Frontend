@@ -20,6 +20,10 @@ export class GameService {
     });
   }
 
+  getGamesByOwnerId(ownerId: string){
+    return this.httpClient.get<GameResponse[]>(this.apiUrl + "owner/" + ownerId, { headers: this.getAuthHeaders() })
+  }
+
   getGamesByTeamId(teamId: string){
     return this.httpClient.get<GameResponse[]>(this.apiUrl + "team/" + teamId, { headers: this.getAuthHeaders() })
   }

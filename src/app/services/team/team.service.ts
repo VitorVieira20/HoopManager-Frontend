@@ -29,7 +29,7 @@ export class TeamService {
   }
 
   getAllTeamsByOwnerId(ownerId: string) {
-    return this.httpClient.get<TeamResponse[]>(this.apiUrl + "all/" + ownerId, { headers: this.getAuthHeaders() })
+    return this.httpClient.get<TeamResponse[]>(this.apiUrl + "owner/" + ownerId, { headers: this.getAuthHeaders() })
   }
 
   createTeam(teamRequest: TeamRequest) {

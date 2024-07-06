@@ -185,6 +185,10 @@ export class GamesDashboardComponent implements OnInit {
     this.router.navigate(['/dashboard', this.ownerId, 'teams', 'create-team', this.selectedClubId]);
   }
 
+  onCreateClub(): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'create-club']);
+  }
+
   formatDate(date: string | Date): string {
     const dt = new Date(date);
     const day = String(dt.getDate()).padStart(2, '0');

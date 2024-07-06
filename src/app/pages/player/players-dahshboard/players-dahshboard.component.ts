@@ -163,4 +163,8 @@ export class PlayersDahshboardComponent implements OnInit {
   onCreateTeam(): void {
     this.router.navigate(['/dashboard', this.ownerId, 'teams', 'create-team', this.selectedClubId]);
   }
+
+  onCreateClub(): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'create-club']);
+  }
 }

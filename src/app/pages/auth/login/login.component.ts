@@ -29,7 +29,7 @@ export class LoginComponent {
 
   onSubmit() {
     this.loginService.login(this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/dashboard', sessionStorage.getItem('user-id')]),
+      next: () => this.router.navigate(['/dashboard', sessionStorage.getItem('user-id'), 'home']),
       error: () => {
         this.errorMessage = "Wrong Credentials";
         return;

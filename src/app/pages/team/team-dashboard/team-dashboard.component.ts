@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TeamService } from '../../../services/team/team.service';
 import { TeamResponse } from '../../types/team-response';
-import { Location } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ClubService } from '../../../services/club/club.service';
@@ -47,7 +46,6 @@ export class TeamDashboardComponent implements OnInit {
     private teamService: TeamService,
     private clubService: ClubService,
     private router: Router,
-    private location: Location,
     private modalService: NgbModal
   ) {}
 
@@ -114,7 +112,7 @@ export class TeamDashboardComponent implements OnInit {
     this.router.navigate(['/dashboard', this.ownerId, 'teams', 'edit-team', teamId]);
   }
 
-  goBack(): void {
-    this.location.back();
+  onCreateClub(): void {
+    this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'create-club']);
   }
 }

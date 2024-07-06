@@ -20,6 +20,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { AuthGuard } from './guards/auth.guard';
 import { OwnerGuard } from './guards/owner.guard';
+import { HomeDashboardComponent } from './pages/home/home-dashboard/home-dashboard.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +28,7 @@ export const routes: Routes = [
         component: DashboardComponent,
         canActivate: [AuthGuard, OwnerGuard],
         children: [
+          { path: 'home', component: HomeDashboardComponent },
           { path: 'clubs', component: ClubDashboardComponent },
           { path: 'clubs/create-club', component: CreateClubComponent },
           { path: 'clubs/edit-club/:club_id', component: EditClubComponent },

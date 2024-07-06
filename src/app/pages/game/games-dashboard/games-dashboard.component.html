@@ -1,73 +1,77 @@
 <div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
   <div class="w-full max-w-4xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
 
-    <div class="mb-4">
-      <label for="club-select" class="block text-textsecondary font-semibold mb-2">Select Club:</label>
-      <select id="club-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedClubId" (change)="onClubChange($event)">
-        <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
-      </select>
-    </div>
-
-    <div class="mb-4" *ngIf="teams.length > 0">
-      <label for="team-select" class="block text-textsecondary font-semibold mb-2">Select Team:</label>
-      <select id="team-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedTeamId" (change)="onTeamChange($event)">
-        <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
-      </select>
-    </div>
-
-    <div class="mb-4 flex space-x-4">
-      <div>
-        <label for="sort-select" class="block text-textsecondary font-semibold mb-2">Sort by:</label>
-        <select id="sort-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedSort" (change)="onSortChange($event)">
-          <option value="date-asc">Date (Asc)</option>
-          <option value="date-desc">Date (Desc)</option>
+    <!-- Verifica se existem clubes -->
+    <ng-container *ngIf="clubs.length > 0; else noClubsTemplate">
+      <div class="mb-4">
+        <label for="club-select" class="block text-textsecondary font-semibold mb-2">Select Club:</label>
+        <select id="club-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedClubId" (change)="onClubChange($event)">
+          <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
         </select>
       </div>
-      <div>
-        <label for="location-filter" class="block text-textsecondary font-semibold mb-2">Filter by Location:</label>
-        <input id="location-filter" type="text" class="w-full p-2 border rounded-md" [(ngModel)]="locationFilter" (input)="onLocationFilterChange($event)" />
-      </div>
-      <div>
-        <label for="name-filter" class="block text-textsecondary font-semibold mb-2">Filter by Name:</label>
-        <input id="name-filter" type="text" class="w-full p-2 border rounded-md" [(ngModel)]="nameFilter" (input)="onNameFilterChange($event)" />
-      </div>
-    </div>
 
-    <ng-container *ngIf="filteredGames.length > 0; else noGamesTemplate">
-      <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold text-primary mb-4">Games:</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
-          <div *ngFor="let game of filteredGames" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
-            <div class="mb-4">
-              <div class="flex justify-between">
-                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.home_team }}</h2>
-                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.away_team }}</h2>
+      <div class="mb-4" *ngIf="teams.length > 0">
+        <label for="team-select" class="block text-textsecondary font-semibold mb-2">Select Team:</label>
+        <select id="team-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedTeamId" (change)="onTeamChange($event)">
+          <option *ngFor="let team of teams" [value]="team.id">{{ team.name }}</option>
+        </select>
+      </div>
+
+      <div class="mb-4 flex space-x-4">
+        <div>
+          <label for="sort-select" class="block text-textsecondary font-semibold mb-2">Sort by:</label>
+          <select id="sort-select" class="w-full p-2 border rounded-md" [(ngModel)]="selectedSort" (change)="onSortChange($event)">
+            <option value="date-asc">Date (Asc)</option>
+            <option value="date-desc">Date (Desc)</option>
+          </select>
+        </div>
+        <div>
+          <label for="location-filter" class="block text-textsecondary font-semibold mb-2">Filter by Location:</label>
+          <input id="location-filter" type="text" class="w-full p-2 border rounded-md" [(ngModel)]="locationFilter" (input)="onLocationFilterChange($event)" />
+        </div>
+        <div>
+          <label for="name-filter" class="block text-textsecondary font-semibold mb-2">Filter by Name:</label>
+          <input id="name-filter" type="text" class="w-full p-2 border rounded-md" [(ngModel)]="nameFilter" (input)="onNameFilterChange($event)" />
+        </div>
+      </div>
+
+      <ng-container *ngIf="filteredGames.length > 0; else noGamesTemplate">
+        <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+          <h2 class="text-2xl font-semibold text-primary mb-4">Games:</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+            <div *ngFor="let game of filteredGames" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+              <div class="mb-4">
+                <div class="flex justify-between">
+                  <h2 class="text-2xl font-semibold text-textsecondary">{{ game.home_team }}</h2>
+                  <h2 class="text-2xl font-semibold text-textsecondary">{{ game.away_team }}</h2>
+                </div>
+                <div *ngIf="hasGameHappened(game.date)" class="flex justify-between">
+                  <h2 class="text-2xl font-semibold text-textsecondary">{{ game.home_score }}</h2>
+                  <h2 class="text-2xl font-semibold text-textsecondary">{{ game.away_score }}</h2>
+                </div>
+                <div class="flex justify-center flex-col items-center">
+                  <p class="text font-medium text-textsecondary">Date: {{ formatDate(game.date) }}</p>
+                  <p class="text font-medium text-textsecondary">Location: {{ game.location }}</p>
+                </div>
               </div>
-              <div *ngIf="hasGameHappened(game.date)" class="flex justify-between">
-                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.home_score }}</h2>
-                <h2 class="text-2xl font-semibold text-textsecondary">{{ game.away_score }}</h2>
+              <div class="flex flex-wrap space-x-2">
+                <a *ngIf="hasGameHappened(game.date)" [routerLink]="['/dashboard', ownerId, 'gamesInfo', game.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                  Game Info
+                </a>
+                <button (click)="openDeleteModal(deleteModal, game)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">
+                  Delete Game
+                </button>
               </div>
-              <div class="flex justify-center flex-col items-center">
-                <p class="text font-medium text-textsecondary">Date: {{ formatDate(game.date) }}</p>
-                <p class="text font-medium text-textsecondary">Location: {{ game.location }}</p>
-              </div>
-            </div>
-            <div class="flex flex-wrap space-x-2">
-              <a *ngIf="hasGameHappened(game.date)" [routerLink]="['/dashboard', ownerId, 'gamesInfo', game.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
-                Game Info
-              </a>
-              <button (click)="openDeleteModal(deleteModal, game)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">
-                Delete Game
-              </button>
             </div>
           </div>
+          <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateGame()">
+            Create Game
+          </button>
         </div>
-        <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateGame()">
-          Create Game
-        </button>
-      </div>
+      </ng-container>
     </ng-container>
 
+    <!-- Template para quando não houver jogos -->
     <ng-template #noGamesTemplate>
       <div class="text-center" *ngIf="hasTeams(); else noTeamsTemplate">
         <h2 class="text-2xl font-semibold mb-4 text-text">No Games Found</h2>
@@ -86,6 +90,16 @@
           </button>
         </div>
       </ng-template>
+    </ng-template>
+
+    <ng-template #noClubsTemplate>
+      <div class="text-center">
+        <h2 class="text-2xl font-semibold mb-4 text-text">No Clubs Found</h2>
+        <p class="text-text mb-4">You need to create a club before adding teams or games.</p>
+        <button class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateClub()">
+          Create Club
+        </button>
+      </div>
     </ng-template>
 
   </div>
