@@ -1,0 +1,124 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { DashboardService } from '../../../services/dashboard/dashboard.service';
+import { ClubService } from '../../../services/club/club.service';
+import { TeamService } from '../../../services/team/team.service';
+import { GameService } from '../../../services/game/game.service';
+import { PlayerService } from '../../../services/player/player.service';
+import { ClubResponse } from '../../types/club-response';
+import { TeamResponse } from '../../types/team-response';
+import { GameResponse } from '../../types/game-response';
+import { PlayerResponse } from '../../types/player-response';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { forkJoin, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-home',
+  standalone: true,
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    RouterModule
+  ],
+  providers: [
+    DashboardService,
+    ClubService,
+    TeamService,
+    GameService,
+    PlayerService
+  ],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
+export class HomeComponent implements OnInit {
+
+  ownerId: string = '';
+  clubsList: string[] = [];
+  teamsList: string[] = [];
+  gamesList: string[] = [];
+  playersList: string[] = [];
+  clubs: ClubResponse[] = [];
+  teams: TeamResponse[] = [];
+  games: GameResponse[] = [];
+  players: PlayerResponse[] = [];
+  actionsMenuId: string | null = null;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private dashboardService: DashboardService,
+    private clubService: ClubService,
+    private teamService: TeamService,
+    private gameService: GameService,
+    private playerService: PlayerService
+  ) {}
+
+  ngOnInit(): void {
+    this.ownerId = this.route.snapshot.parent?.params['owner_id'] || '';
+    this.loadUserInfoAndFavorites();
+  }
+
+  loadUserInfo(): Observable<any> {
+    return this.dashboardService.getUserById(this.ownerId);
+  }
+
+  loadUserFavorites(clubsList: string[], teamsList: string[], gamesList: string[], playersList: string[]): Observable<any[]> {
+    const clubRequests = clubsList ? clubsList.map(id => this.clubService.getClubById(id)) : [];
+    const teamRequests = teamsList ? teamsList.map(id => this.teamService.getTeamById(id)) : [];
+    const gameRequests = gamesList ? gamesList.map(id => this.gameService.getGameById(id)) : [];
+    const playerRequests = playersList ? playersList.map(id => this.playerService.getPlayerById(id)) : [];
+
+    return forkJoin([...clubRequests, ...teamRequests, ...gameRequests, ...playerRequests]);
+  }
+
+  loadUserInfoAndFavorites(): void {
+    this.loadUserInfo().pipe(
+      switchMap(data => {
+        this.clubsList = data.clubs || [];
+        this.teamsList = data.teams || [];
+        this.gamesList = data.games || [];
+        this.playersList = data.players || [];
+
+        return this.loadUserFavorites(this.clubsList, this.teamsList, this.gamesList, this.playersList);
+      })
+    ).subscribe({
+      next: (responses) => {
+        const clubCount = this.clubsList ? this.clubsList.length : 0;
+        const teamCount = this.teamsList ? this.teamsList.length : 0;
+        const gameCount = this.gamesList ? this.gamesList.length : 0;
+
+        this.clubs = responses.slice(0, clubCount) as ClubResponse[];
+        this.teams = responses.slice(clubCount, clubCount + teamCount) as TeamResponse[];
+        this.games = responses.slice(clubCount + teamCount, clubCount + teamCount + gameCount) as GameResponse[];
+        this.players = responses.slice(clubCount + teamCount + gameCount) as PlayerResponse[];
+
+        console.log(this.clubs);
+        console.log(this.teams);
+        console.log(this.games);
+        console.log(this.players);
+      },
+      error: (err) => console.log('Error while loading user information and favorites: ', err)
+    });
+  }
+
+  removeClubFromFavorite(clubId: string): void {
+    /*this.clubService.removeFavoriteClub(clubId).subscribe({
+      next: () => {
+        this.clubs = this.clubs.filter(club => club.id !== clubId);  // Remove o clube da lista de clubes
+        this.actionsMenuId = null;  // Fecha o menu de ações
+      },
+      error: () => console.error('Failed to remove club from favorites')
+    });*/
+  }
+
+  viewClub(clubId: string): void {
+    this.router.navigate(['client-dashboard', this.ownerId, 'clubs', clubId]);
+  }
+
+  showActionsMenu(clubId: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.actionsMenuId = this.actionsMenuId === clubId ? null : clubId;
+  }
+}

@@ -1,0 +1,59 @@
+<div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
+    <div class="w-full max-w-6xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
+        <h1 class="text-3xl font-semibold text-primary mb-6">Dashboard</h1>
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Clubs</h2>
+            <div *ngIf="clubs.length === 0" class="text-center text-textsecondary">
+                <p>No favorite clubs yet.</p>
+            </div>
+            <div *ngIf="clubs.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div *ngFor="let club of clubs" class="bg-gray-100 p-4 rounded-lg text-center relative">
+                    <button (click)="showActionsMenu(club.id, $event)">
+                        <div *ngIf="actionsMenuId === club.id" class="absolute top-10 right-2 bg-white shadow-lg rounded-lg p-2 z-10">
+                            <button (click)="viewClub(club.id)" class="block text-sm text-blue-500 hover:text-blue-700">View Club</button>
+                            <button (click)="removeClubFromFavorite(club.id)" class="block text-sm text-red-500 hover:text-red-700">Remove from Favorites</button>
+                        </div>
+                        <h3 class="text-lg font-semibold text-textsecondary">{{ club.name }}</h3>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Teams</h2>
+            <div *ngIf="teams.length === 0" class="text-center text-textsecondary">
+                <p>No favorite teams yet.</p>
+            </div>
+            <div *ngIf="teams.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div *ngFor="let team of teams" class="bg-gray-100 p-4 rounded-lg text-center">
+                    <h3 class="text-lg font-semibold text-textsecondary">{{ team.name }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Games</h2>
+            <div *ngIf="games.length === 0" class="text-center text-textsecondary">
+                <p>No favorite games yet.</p>
+            </div>
+            <div *ngIf="games.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div *ngFor="let game of games" class="bg-gray-100 p-4 rounded-lg text-center">
+                    <h3 class="text-lg font-semibold text-textsecondary">{{ game.home_team }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Players</h2>
+            <div *ngIf="players.length === 0" class="text-center text-textsecondary">
+                <p>No favorite players yet.</p>
+            </div>
+            <div *ngIf="players.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div *ngFor="let player of players" class="bg-gray-100 p-4 rounded-lg text-center">
+                    <h3 class="text-lg font-semibold text-textsecondary">{{ player.name }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
