@@ -12,12 +12,7 @@ export class SignupService {
 
   apiUrl: string = "http://localhost:8081/api/auth";
 
-  signup(name: string, email: string, password: string){
-    return this.httpClient.post<LoginResponse>(this.apiUrl + "/register", { name, email, password }).pipe(
-      tap((value) => {
-        sessionStorage.setItem("auth-token", value.token)
-        sessionStorage.setItem("user-id", value.id)
-      })
-    )
+  signup(name: string, email: string, password: string, role: string, plan: string){
+    return this.httpClient.post<LoginResponse>(this.apiUrl + "/register", { name, email, password, role, plan })
   }
 }

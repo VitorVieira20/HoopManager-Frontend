@@ -1,26 +1,40 @@
 <div class="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-    <div class="w-full max-w-md bg-secondary rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-semibold text-textsecondary mb-6 text-center">Register</h2>
-      <form (ngSubmit)="onSubmit()">
-        <div class="mb-4">
-          <label for="username" class="block text-textsecondary font-semibold mb-2">Username</label>
-          <input type="text" id="username" [(ngModel)]="username" name="username" required class="w-full p-2 border rounded-md">
-        </div>
-        <div class="mb-4">
-          <label for="email" class="block text-textsecondary font-semibold mb-2">Email</label>
-          <input type="email" id="email" [(ngModel)]="email" name="email" required class="w-full p-2 border rounded-md">
-        </div>
-        <div class="mb-4">
-          <label for="password" class="block text-textsecondary font-semibold mb-2">Password</label>
-          <input type="password" id="password" [(ngModel)]="password" name="password" required class="w-full p-2 border rounded-md">
-        </div>
-        <div class="mb-6">
-          <label for="confirmPassword" class="block text-textsecondary font-semibold mb-2">Confirm Password</label>
-          <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required class="w-full p-2 border rounded-md">
-        </div>
-        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-        <button type="submit" class="w-full py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">Register</button>
-      </form>
-      <p class="text-center text-textsecondary mt-4">Already have an account? <a routerLink="/login" class="text-accent hover:underline">Login here</a></p>
-    </div>
+  <div class="w-full max-w-md bg-secondary rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-semibold text-textsecondary mb-6 text-center">Register</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label for="username" class="block text-textsecondary font-semibold mb-2">Username</label>
+        <input type="text" id="username" [(ngModel)]="username" name="username" required class="w-full p-2 border rounded-md">
+      </div>
+      <div class="mb-4">
+        <label for="email" class="block text-textsecondary font-semibold mb-2">Email</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" required class="w-full p-2 border rounded-md">
+      </div>
+      <div class="mb-4">
+        <label for="password" class="block text-textsecondary font-semibold mb-2">Password</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required class="w-full p-2 border rounded-md">
+      </div>
+      <div class="mb-4">
+        <label for="confirmPassword" class="block text-textsecondary font-semibold mb-2">Confirm Password</label>
+        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required class="w-full p-2 border rounded-md">
+      </div>
+      <div class="mb-4">
+        <label for="role" class="block text-textsecondary font-semibold mb-2">Role</label>
+        <select id="role" [(ngModel)]="role" name="role" required class="w-full p-2 border rounded-md" (change)="onRoleChange($event)">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="mb-4" *ngIf="role === 'admin'">
+        <label for="plan" class="block text-textsecondary font-semibold mb-2">Plan</label>
+        <select id="plan" [(ngModel)]="plan" name="plan" required class="w-full p-2 border rounded-md">
+          <option value="standard">Standard</option>
+          <option value="pro">Pro</option>
+        </select>
+      </div>
+      <p class="error-message text-red-500" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <button type="submit" class="w-full py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover">Register</button>
+    </form>
+    <p class="text-center text-textsecondary mt-4">Already have an account? <a routerLink="/login" class="text-accent hover:underline">Login here</a></p>
   </div>
+</div>

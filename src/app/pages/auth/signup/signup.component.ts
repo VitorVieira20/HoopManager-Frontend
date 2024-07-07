@@ -23,6 +23,8 @@ export class SignupComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  role: string = 'user';
+  plan: string = 'standard';
   errorMessage: string = '';
 
   constructor(private signupService: SignupService, private router: Router) {}
@@ -33,9 +35,13 @@ export class SignupComponent {
       return;
     }
 
-    this.signupService.signup(this.username, this.email, this.password).subscribe({
+    this.signupService.signup(this.username, this.email, this.password, this.role, this.plan).subscribe({
       next: () => this.router.navigate(['/login']),
       error: () => console.error("Erro inesperado! Tente novamente mais tarde")
     });
+  }
+
+  onRoleChange(event: any) {
+    this.role = event.target.value;
   }
 }
