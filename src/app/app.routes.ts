@@ -22,12 +22,17 @@ import { AuthGuard } from './guards/auth.guard';
 import { OwnerGuard } from './guards/owner.guard';
 import { HomeDashboardComponent } from './pages/home/home-dashboard/home-dashboard.component';
 import { CalendarDashboardComponent } from './pages/calendar/calendar-dashboard/calendar-dashboard.component';
+import { ClientDashboardComponent } from './pages/client/client-dashboard/client-dashboard.component';
+import { HomeComponent } from './pages/client/home/home.component';
+import { ClubsComponent } from './pages/client/clubs/clubs.component';
+import { AdminRoleGuard } from './guards/admin-role.guard';
+import { UserRoleGuard } from './guards/user-role.guard';
 
 export const routes: Routes = [
     {
         path: 'dashboard/:owner_id',
         component: DashboardComponent,
-        canActivate: [AuthGuard, OwnerGuard],
+        canActivate: [AuthGuard, OwnerGuard, AdminRoleGuard],
         children: [
           { path: 'home', component: HomeDashboardComponent },
           { path: 'clubs', component: ClubDashboardComponent },
@@ -52,6 +57,16 @@ export const routes: Routes = [
           { path: 'contacts/:club_id', component: ContactsComponent },
           { path: 'calendar/:team_id', component: CalendarDashboardComponent },
         ]
+    },
+    {
+      path: 'client-dashboard/:owner_id',
+      component: ClientDashboardComponent,
+      canActivate: [AuthGuard, OwnerGuard, UserRoleGuard],
+      children: [
+        { path: 'home', component: HomeComponent },
+        { path: 'clubs', component: ClubsComponent },
+        { path: 'clubs/:club_id', component: ClubsComponent },
+      ]
     },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: SignupComponent },
