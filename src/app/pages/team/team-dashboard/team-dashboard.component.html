@@ -26,7 +26,7 @@
                 <a [routerLink]="['/dashboard', ownerId, 'games', team.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
                   View Games
                 </a>
-                <a [routerLink]="['/', team.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                <a [routerLink]="['/dashboard', ownerId, 'calendar', team.id]" class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
                   View Calendar
                 </a>
                 <button (click)="openDeleteModal(deleteModal, team)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">

@@ -21,6 +21,7 @@ import { SignupComponent } from './pages/auth/signup/signup.component';
 import { AuthGuard } from './guards/auth.guard';
 import { OwnerGuard } from './guards/owner.guard';
 import { HomeDashboardComponent } from './pages/home/home-dashboard/home-dashboard.component';
+import { CalendarDashboardComponent } from './pages/calendar/calendar-dashboard/calendar-dashboard.component';
 
 export const routes: Routes = [
     {
@@ -49,6 +50,7 @@ export const routes: Routes = [
           { path: 'gamesInfo/edit-info/:game_info_id', component: GameInfoEditComponent },
           { path: 'contacts', component: ContactsComponent },
           { path: 'contacts/:club_id', component: ContactsComponent },
+          { path: 'calendar/:team_id', component: CalendarDashboardComponent },
         ]
     },
     { path: 'login', component: LoginComponent },
