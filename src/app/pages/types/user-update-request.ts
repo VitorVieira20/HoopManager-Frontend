@@ -1,4 +1,4 @@
 export type UserUpdateRequest = {
-    clubs: string[]
+  clubs?: string[],
+  teams?: string[]
 }
-  
