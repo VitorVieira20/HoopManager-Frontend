@@ -34,7 +34,7 @@ import { switchMap } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
 
-  ownerId: string = '';
+  userId: string = '';
   clubsList: string[] = [];
   teamsList: string[] = [];
   gamesList: string[] = [];
@@ -56,12 +56,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ownerId = this.route.snapshot.parent?.params['owner_id'] || '';
+    this.userId = this.route.snapshot.parent?.params['user_id'] || '';
     this.loadUserInfoAndFavorites();
   }
 
   loadUserInfo(): Observable<any> {
-    return this.dashboardService.getUserById(this.ownerId);
+    return this.dashboardService.getUserById(this.userId);
   }
 
   loadUserFavorites(clubsList: string[], teamsList: string[], gamesList: string[], playersList: string[]): Observable<any[]> {
@@ -114,7 +114,7 @@ export class HomeComponent implements OnInit {
   }
 
   viewClub(clubId: string): void {
-    this.router.navigate(['client-dashboard', this.ownerId, 'clubs', clubId]);
+    this.router.navigate(['client-dashboard', this.userId, 'clubs', clubId]);
   }
 
   showActionsMenu(clubId: string, event: MouseEvent): void {

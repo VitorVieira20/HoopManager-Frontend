@@ -59,7 +59,7 @@ export const routes: Routes = [
         ]
     },
     {
-      path: 'client-dashboard/:owner_id',
+      path: 'client-dashboard/:user_id',
       component: ClientDashboardComponent,
       canActivate: [AuthGuard, OwnerGuard, UserRoleGuard],
       children: [

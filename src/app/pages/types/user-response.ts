@@ -3,7 +3,7 @@ export type UserResponse = {
     name: string,
     email: string,
     role: string,
-    plan?: string,
+    plan: string,
     clubs?: string[],
     teams?: string[],
     games?: string[],

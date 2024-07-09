@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class ClientDashboardComponent implements OnInit {
 
-  ownerId: string = '';
+  userId: string = '';
   user!: UserResponse;
 
   constructor(
@@ -31,12 +31,12 @@ export class ClientDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ownerId = this.route.snapshot.params['owner_id'];
+    this.userId = this.route.snapshot.params['user_id'];
     this.loadUserInfo();
   }
 
   loadUserInfo() : void {
-    this.dashboardService.getUserById(this.ownerId).subscribe({
+    this.dashboardService.getUserById(this.userId).subscribe({
       next: (data) => this.user = data,
       error: (err) => console.error('Error loading user', err)
     })
@@ -46,6 +46,7 @@ export class ClientDashboardComponent implements OnInit {
     sessionStorage.removeItem('auth-token');
     sessionStorage.removeItem('user-email');
     sessionStorage.removeItem('user-id');
+    sessionStorage.removeItem('user-role');
     this.router.navigate(['/login']);
   }
 

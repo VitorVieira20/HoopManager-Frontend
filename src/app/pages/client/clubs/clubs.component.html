@@ -1,0 +1,124 @@
+<div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
+    <div class="w-full max-w-4xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
+
+        <!-- Single Club View -->
+        <ng-container *ngIf="clubId; else allClubsTemplate">
+            <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-primary mb-4">Club Details:</h2>
+                <div class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                    <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
+                    <p>Email: {{ club.email }}</p>
+                    <p>Phone: {{ club.phone }}</p>
+                    <p>Instagram: {{ club.instagram }}</p>
+                    <p>Twitter: {{ club.twitter }}</p>
+                    <p>Facebook: {{ club.facebook }}</p>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Search Bar -->
+        <div class="mt-4 w-full">
+            <input type="text" placeholder="Search for clubs..." (input)="loadClubs($event)" #searchInput
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+        </div>
+
+        <!-- Search Results -->
+        <ng-container *ngIf="clubsSearch.length > 0">
+            <div class="container mx-auto p-4 bg-white rounded-lg shadow-md mt-4">
+                <h2 class="text-2xl font-semibold text-primary mb-4">Search Results:</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                    <div *ngFor="let club of clubsSearch"
+                        class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                        <div class="mb-4">
+                            <div class="flex flex-row">
+                                <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap space-x-2">
+                            <button (click)="showAddFavoriteModal(club.id)"
+                                class="mt-4 flex-1 px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-900 text-center">
+                                Add to Favorites
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- All Clubs Template -->
+        <ng-template #allClubsTemplate>
+            <!-- Favorite Clubs View -->
+            <ng-container *ngIf="favoriteClubs.length > 0; else noFavoriteClubsTemplate">
+                <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+                    <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Clubs:</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                        <div *ngFor="let club of favoriteClubs"
+                            class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                            <div class="mb-4">
+                                <div class="flex flex-row">
+                                    <h2 class="text-2xl font-semibold text-primary mb-2">{{ club.name }}</h2>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap space-x-2">
+                                <a [routerLink]="['/client-dashboard', userId, 'teams', club.id]"
+                                    class="mt-4 ml-2 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                                    View Teams
+                                </a>
+                                <a [routerLink]="['/client-dashboard', userId, 'clubs', club.id]"
+                                    class="mt-4 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                                    Contact Page
+                                </a>
+                                <button (click)="showRemoveFavoriteModal(club.id)"
+                                    class="mt-4 flex-1 px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-900 text-center">
+                                    Remove from Favorites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- No Favorite Clubs View -->
+            <ng-template #noFavoriteClubsTemplate>
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold mb-4 text-text">No Favorite Clubs Found</h2>
+                    <p class="text-text mb-4">You don't have any favorite clubs yet. Use the search bar above to find
+                        clubs.</p>
+                </div>
+            </ng-template>
+        </ng-template>
+    </div>
+</div>
+
+
+<!-- Confirmation Modal -->
+<div id="removeConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50 hidden"
+    [ngClass]="{'hidden': !showRemoveConfirmationModal}">
+    <div class="bg-black opacity-50 absolute inset-0"></div>
+    <div class="bg-white rounded-lg p-6 z-10">
+        <h2 class="text-2xl font-semibold mb-4">Confirm Removal</h2>
+        <p>Are you sure you want to remove this club from your favorites?</p>
+        <div class="mt-4 flex justify-end">
+            <button (click)="confirmRemoveFavorite()"
+                class="px-4 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover mr-2">Confirm</button>
+            <button (click)="cancelRemoveFavorite()"
+                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="addConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50 hidden"
+    [ngClass]="{'hidden': !showAddConfirmationModal}">
+    <div class="bg-black opacity-50 absolute inset-0"></div>
+    <div class="bg-white rounded-lg p-6 z-10">
+        <h2 class="text-2xl font-semibold mb-4">Confirm Addition</h2>
+        <p>Are you sure you want to add this club to your favorites?</p>
+        <div class="mt-4 flex justify-end">
+            <button (click)="confirmAddFavorite()"
+                class="px-4 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover mr-2">Confirm</button>
+            <button (click)="cancelAddFavorite()"
+                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700">Cancel</button>
+        </div>
+    </div>
+</div>

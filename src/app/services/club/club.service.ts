@@ -28,6 +28,14 @@ export class ClubService {
     return this.httpClient.get<ClubResponse>(`${this.apiUrl}${clubId}`, { headers: this.getAuthHeaders() });
   }
 
+  getClubsByName(clubName: string) {
+    return this.httpClient.get<ClubResponse[]>(`${this.apiUrl}name/${clubName}`, { headers: this.getAuthHeaders() });
+  }
+
+  getFavoriteClubsByUserId(userId: string) {
+    return this.httpClient.get<ClubResponse[]>(`${this.apiUrl}favs/${userId}`, { headers: this.getAuthHeaders() });
+  }
+
   createClub(clubRequest: ClubRequest) {
     return this.httpClient.post<ClubResponse>(this.apiUrl, clubRequest, { headers: this.getAuthHeaders() });
   }
