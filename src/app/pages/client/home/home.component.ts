@@ -103,13 +103,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
-  viewClub(clubId: string): void {
-    this.router.navigate(['client-dashboard', this.userId, 'clubs', clubId]);
-  }
-
   showClub(clubId: string, event: MouseEvent): void {
     event.stopPropagation();
     this.router.navigate(['/client-dashboard', this.userId, 'clubs', clubId])
+  }
+
+  showTeam(teamId: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.router.navigate(['/client-dashboard', this.userId, 'teams', teamId])
   }
 }

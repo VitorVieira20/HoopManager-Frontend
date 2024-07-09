@@ -27,6 +27,7 @@ import { HomeComponent } from './pages/client/home/home.component';
 import { ClubsComponent } from './pages/client/clubs/clubs.component';
 import { AdminRoleGuard } from './guards/admin-role.guard';
 import { UserRoleGuard } from './guards/user-role.guard';
+import { TeamsComponent } from './pages/client/teams/teams.component';
 
 export const routes: Routes = [
     {
@@ -66,6 +67,8 @@ export const routes: Routes = [
         { path: 'home', component: HomeComponent },
         { path: 'clubs', component: ClubsComponent },
         { path: 'clubs/:club_id', component: ClubsComponent },
+        { path: 'teams', component: TeamsComponent },
+        { path: 'teams/:team_id', component: TeamsComponent },
       ]
     },
     { path: 'login', component: LoginComponent },
