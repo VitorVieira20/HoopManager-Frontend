@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { TeamResponse } from '../../pages/types/team-response';
 import { TeamRequest } from '../../pages/types/team-request';
 import { TeamUpdateRequest } from '../../pages/types/team-update-request';
+import { map, Observable, switchMap } from 'rxjs';
+import { ClubService } from '../club/club.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +30,16 @@ export class TeamService {
     return this.httpClient.get<TeamResponse>(this.apiUrl + teamId, { headers: this.getAuthHeaders() })
   }
 
+  getTeamsByName(teamName: string) {
+    return this.httpClient.get<TeamResponse[]>(`${this.apiUrl}name/${teamName}`, { headers: this.getAuthHeaders() });
+  }
+
   getAllTeamsByOwnerId(ownerId: string) {
     return this.httpClient.get<TeamResponse[]>(this.apiUrl + "owner/" + ownerId, { headers: this.getAuthHeaders() })
+  }
+
+  getFavoriteTeamsByUserId(userId: string) {
+    return this.httpClient.get<TeamResponse[]>(`${this.apiUrl}favs/${userId}`, { headers: this.getAuthHeaders() });
   }
 
   createTeam(teamRequest: TeamRequest) {
