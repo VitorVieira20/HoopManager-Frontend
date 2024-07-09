@@ -74,20 +74,17 @@ export class ClubsComponent implements OnInit {
   loadClubs(event: Event): void {
     const input = event.target as HTMLInputElement;
     const clubName = input.value;
-    console.log('Input club name:', clubName);
 
     if (clubName === '') {
       this.clubsSearch = [];
     } else {
       this.clubService.getClubsByName(clubName).subscribe({
         next: (data) => {
-          console.log('Search results:', data);
           if (data) {
             this.clubsSearch = this.filterFavoriteClubs(data);
           } else {
             this.clubsSearch = [];
           }
-          console.log('Updated clubsSearch:', this.clubsSearch);
         },
         error: (err) => console.log('Error while searching for clubs:', err)
       });
