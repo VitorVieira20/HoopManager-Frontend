@@ -7,13 +7,9 @@
             <div *ngIf="clubs.length === 0" class="text-center text-textsecondary">
                 <p>No favorite clubs yet.</p>
             </div>
-            <div *ngIf="clubs.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div *ngFor="let club of clubs" class="bg-gray-100 p-4 rounded-lg text-center relative">
-                    <button (click)="showActionsMenu(club.id, $event)">
-                        <div *ngIf="actionsMenuId === club.id" class="absolute top-10 right-2 bg-white shadow-lg rounded-lg p-2 z-10">
-                            <button (click)="viewClub(club.id)" class="block text-sm text-blue-500 hover:text-blue-700">View Club</button>
-                            <button (click)="removeClubFromFavorite(club.id)" class="block text-sm text-red-500 hover:text-red-700">Remove from Favorites</button>
-                        </div>
+            <div *ngIf="clubs.length > 0" class="flex flex-wrap gap-6">
+                <div *ngFor="let club of clubs" class="flex-1 min-w-[calc(25%-1.5rem)] bg-gray-100 p-4 rounded-lg text-center relative hover:bg-gray-200 transition-colors">
+                    <button (click)="showClub(club.id, $event)">
                         <h3 class="text-lg font-semibold text-textsecondary">{{ club.name }}</h3>
                     </button>
                 </div>

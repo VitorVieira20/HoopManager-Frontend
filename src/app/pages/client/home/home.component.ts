@@ -103,22 +103,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  removeClubFromFavorite(clubId: string): void {
-    /*this.clubService.removeFavoriteClub(clubId).subscribe({
-      next: () => {
-        this.clubs = this.clubs.filter(club => club.id !== clubId);  // Remove o clube da lista de clubes
-        this.actionsMenuId = null;  // Fecha o menu de ações
-      },
-      error: () => console.error('Failed to remove club from favorites')
-    });*/
-  }
 
   viewClub(clubId: string): void {
     this.router.navigate(['client-dashboard', this.userId, 'clubs', clubId]);
   }
 
-  showActionsMenu(clubId: string, event: MouseEvent): void {
+  showClub(clubId: string, event: MouseEvent): void {
     event.stopPropagation();
-    this.actionsMenuId = this.actionsMenuId === clubId ? null : clubId;
+    this.router.navigate(['/client-dashboard', this.userId, 'clubs', clubId])
   }
 }

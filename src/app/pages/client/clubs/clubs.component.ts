@@ -31,12 +31,13 @@ export class ClubsComponent implements OnInit {
 
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  userId: string = ''
-  clubId: string = ''
-  club: ClubResponse = {id: '', name: '', email: '', phone: 0, instagram: '', twitter: '', facebook: '', owner_id: ''}
-  clubsSearch: ClubResponse[] = []
-  favoriteClubs: ClubResponse[] = []
-  user: UserResponse = {id: '', name: '', email: '', role: '', plan: '', clubs: [''], teams: [''], games: [''], players: ['']}
+  userId: string = '';
+  clubId: string = '';
+  club: ClubResponse = {id: '', name: '', email: '', phone: 0, instagram: '', twitter: '', facebook: '', owner_id: ''};
+  clubsSearch: ClubResponse[] = [];
+  favoriteClubs: ClubResponse[] = [];
+  filteredFavoriteClubs: ClubResponse[] = [];
+  user: UserResponse = {id: '', name: '', email: '', role: '', plan: '', clubs: [''], teams: [''], games: [''], players: ['']};
   showAddConfirmationModal: boolean = false;
   showRemoveConfirmationModal: boolean = false;
   clubToRemove: string | null = null;
@@ -50,12 +51,12 @@ export class ClubsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.route.parent?.snapshot.params['user_id']
-    this.clubId = this.route.snapshot.params['club_id']
+    this.userId = this.route.parent?.snapshot.params['user_id'];
+    this.clubId = this.route.snapshot.params['club_id'];
     if (this.clubId) {
-      this.loadClubInfo(this.clubId)
+      this.loadClubInfo(this.clubId);
     }
-    this.loadFavoriteClubs()
+    this.loadFavoriteClubs();
   }
 
   loadClubInfo(clubId: string): void {
@@ -65,32 +66,52 @@ export class ClubsComponent implements OnInit {
     });
   }
 
+  private filterFavoriteClubs(clubs: ClubResponse[]): ClubResponse[] {
+    const favoriteClubIds = new Set(this.favoriteClubs.map(club => club.id));
+    return clubs.filter(club => !favoriteClubIds.has(club.id));
+  }
+
   loadClubs(event: Event): void {
-    const input = event.target as HTMLInputElement
-    const clubName = input.value
+    const input = event.target as HTMLInputElement;
+    const clubName = input.value;
+    console.log('Input club name:', clubName);
+
     if (clubName === '') {
-      this.clubsSearch = []
+      this.clubsSearch = [];
     } else {
       this.clubService.getClubsByName(clubName).subscribe({
         next: (data) => {
+          console.log('Search results:', data);
           if (data) {
-            this.clubsSearch = data.filter(club => !this.favoriteClubs.some(favClub => favClub.id === club.id))
+            this.clubsSearch = this.filterFavoriteClubs(data);
           } else {
-            this.clubsSearch = []
+            this.clubsSearch = [];
           }
           console.log('Updated clubsSearch:', this.clubsSearch);
         },
         error: (err) => console.log('Error while searching for clubs:', err)
-      })
-    }    
+      });
+    }
   }
 
   loadFavoriteClubs(): void {
     this.clubService.getFavoriteClubsByUserId(this.userId).subscribe({
-      next: (data) => this.favoriteClubs = data,
-      error: (err) => console.log('Error while loading favorite clubs: ', err)
+      next: (data) => {
+        if (data) {
+          this.favoriteClubs = data;
+          this.filteredFavoriteClubs = this.clubId ? data.filter(club => club.id !== this.clubId) : data;
+        } else {
+          console.log('No favorite clubs data received.');
+        }
+      },
+      error: (err) => {
+        console.log('Error while loading favorite clubs:', err);
+        this.favoriteClubs = [];
+        this.filteredFavoriteClubs = [];
+      }
     });
   }
+  
 
   showRemoveFavoriteModal(clubId: string): void {
     this.showRemoveConfirmationModal = true;
@@ -104,9 +125,9 @@ export class ClubsComponent implements OnInit {
 
   confirmRemoveFavorite(): void {
     if (this.clubToRemove) {
-      const updatedFavoritesIds = this.favoriteClubs.filter(club => club.id !== this.clubToRemove).map(club => club.id)
+      const updatedFavoritesIds = this.favoriteClubs.filter(club => club.id !== this.clubToRemove).map(club => club.id);
 
-      const updateUserRequest: UserUpdateRequest = { clubs: updatedFavoritesIds }
+      const updateUserRequest: UserUpdateRequest = { clubs: updatedFavoritesIds };
 
       this.userService.updateUser(this.userId, updateUserRequest).subscribe({
         next: (data) => {
@@ -116,10 +137,11 @@ export class ClubsComponent implements OnInit {
           this.clubToRemove = null;
           this.router.navigate([this.router.url]).then(() => {
             this.searchInput.nativeElement.value = '';
-            this.clubsSearch = []
+            this.loadFavoriteClubs()
+            this.clubsSearch = [];
           });
         },
-        error: (err) => console.log('Error while updating user information: ', err)
+        error: (err) => console.log('Error while updating user information:', err)
       });
     }
   }
@@ -138,14 +160,21 @@ export class ClubsComponent implements OnInit {
           this.clubToAdd = null;
           this.router.navigate([this.router.url]).then(() => {
             this.searchInput.nativeElement.value = '';
-            this.clubsSearch = []
+            this.loadFavoriteClubs()
+            this.clubsSearch = [];
           });
         },
-        error: (err) => console.log('Error while updating user information: ', err)
+        error: (err) => console.log('Error while updating user information:', err)
       });
     }
   }
-  
+
+  navigateToClubContacts(clubId: string): void {
+    this.router.navigate(['/client-dashboard', this.userId, 'clubs', clubId]).then(() => {
+      window.location.reload();
+    });
+  }
+
   cancelRemoveFavorite(): void {
     this.showRemoveConfirmationModal = false;
     this.clubToRemove = null;
