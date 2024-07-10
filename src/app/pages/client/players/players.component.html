@@ -1,0 +1,136 @@
+<div class="min-h-screen flex flex-col items-center justify-start bg-background p-4">
+    <div class="w-full max-w-4xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
+
+        <!-- Single Club View -->
+        <ng-container *ngIf="playerId; else showFavPlayers">
+            <div class="container mx-auto p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-primary mb-4">Player Details:</h2>
+                <div class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                    <h2 class="text-2xl font-semibold text-primary mb-2">{{ player.name }}</h2>
+                    <p class="text text-gray-700 font-medium mt-1">Club: <span class="font-bold text-primary">{{ player.clubName }}</span></p>
+                    <p class="text text-gray-700 font-medium mt-1">Team: <span class="font-bold text-primary">{{ player.teamName }}</span></p>
+                    <p class="text text-gray-700 font-medium mt-1">Position: <span class="font-bold text-primary">{{ player.position }}</span></p>
+                </div>
+            </div>
+            <ng-container *ngIf="favoritePlayers && favoritePlayers.length > 1;">
+                <h2 class="text-2xl font-semibold text-primary mb-4 mt-4">Favorite Players:</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                    <div *ngFor="let player of filteredFavoritePlayers" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                        <div class="mb-4">
+                            <div class="flex flex-col">
+                                <h2 class="text-xl font-semibold text-primary mb-2">{{ player.name }}</h2>
+                                <p class="text text-gray-700 font-medium mt-1">Club: <span class="font-bold text-primary">{{ player.clubName }}</span></p>
+                                <p class="text text-gray-700 font-medium mt-1">Team: <span class="font-bold text-primary">{{ player.teamName }}</span></p>
+                                <p class="text text-gray-700 font-medium mt-1">Position: <span class="font-bold text-primary">{{ player.position }}</span></p>            
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap space-x-2">
+                            <a [routerLink]="['/client-dashboard', userId, 'games', player.id]"
+                               class="mt-4 ml-2 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                                View Games
+                            </a>
+                            <button (click)="showRemoveFavoriteModal(player.id)"
+                                    class="mt-4 flex-1 px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-900 text-center">
+                                Remove from Favorites
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noFavoritePlayersTemplate>
+                <p class="text-primary">No favorite athletes found.</p>
+            </ng-template>
+        </ng-container>
+
+        <!-- Favorite Athletes View -->
+        <ng-template #showFavPlayers>
+            <ng-container *ngIf="favoritePlayers.length > 0; else noFavoritePlayersTemplate2">
+                <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Players:</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                    <div *ngFor="let player of favoritePlayers" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                        <div class="mb-4">
+                            <div class="flex flex-col">
+                                <h2 class="text-xl font-semibold text-primary mb-2">{{ player.name }}</h2>
+                                <p class="text text-gray-700 font-medium mt-1">Club: <span class="font-bold text-primary">{{ player.clubName }}</span></p>
+                                <p class="text text-gray-700 font-medium mt-1">Team: <span class="font-bold text-primary">{{ player.teamName }}</span></p>
+                                <p class="text text-gray-700 font-medium mt-1">Position: <span class="font-bold text-primary">{{ player.position }}</span></p>            
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap space-x-2">
+                            <a [routerLink]="['/client-dashboard', userId, 'games', player.id]"
+                               class="mt-4 ml-2 flex-1 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover text-center">
+                                View Games
+                            </a>
+                            <button (click)="showRemoveFavoriteModal(player.id)"
+                                    class="mt-4 flex-1 px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-900 text-center">
+                                Remove from Favorites
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noFavoritePlayersTemplate2>
+                <h2 class="text-2xl font-semibold text-primary mb-4 mt-4">You don't have any favorite athletes yet.</h2>
+            </ng-template>
+        </ng-template>
+
+        <!-- Search for Athletes -->
+        <div class="w-full mt-8">
+            <label for="club-search" class="text-primary text-xl">Search for Athletes:</label>
+            <input #searchInput id="team-search" type="text" (input)="loadPlayers($event)"
+                   class="w-full p-4 border-2 border-secondary rounded-lg focus:outline-none focus:border-primary mt-2"
+                   placeholder="Enter team name">
+        </div>
+
+        <!-- Athletes Search Results -->
+        <div *ngIf="playersSearch.length > 0" class="w-full mt-4">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Search Results:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                <div *ngFor="let player of playersSearch" class="p-6 border-4 border-secondary rounded-lg shadow-md bg-white">
+                    <div class="mb-4">
+                        <div class="flex flex-col">
+                            <h2 class="text-xl font-semibold text-primary mb-2">{{ player.name }}</h2>
+                            <p class="text text-gray-700 font-medium mt-1">Club: <span class="font-bold text-primary">{{ player.clubName }}</span></p>
+                            <p class="text text-gray-700 font-medium mt-1">Team: <span class="font-bold text-primary">{{ player.teamName }}</span></p>
+                            <p class="text text-gray-700 font-medium mt-1">Position: <span class="font-bold text-primary">{{ player.position }}</span></p>        
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap space-x-2">
+                        <button (click)="showAddFavoriteModal(player.id)"
+                                class="mt-4 flex-1 px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-900 text-center">
+                            Add to Favorites
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remove Confirmation Modal -->
+    <div *ngIf="showRemoveConfirmationModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Remove from Favorites</h2>
+            <p>Are you sure you want to remove this athlete from your favorites?</p>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button (click)="confirmRemoveFavorite()"
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-800">Yes</button>
+                <button (click)="cancelRemoveFavorite()"
+                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Confirmation Modal -->
+    <div *ngIf="showAddConfirmationModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-primary mb-4">Add to Favorites</h2>
+            <p>Are you sure you want to add this athlete to your favorites?</p>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button (click)="confirmAddFavorite()"
+                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-800">Yes</button>
+                <button (click)="cancelAddFavorite()"
+                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">No</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,5 +5,7 @@ export type PlayerResponse = {
     team_id: string,
     points?: number,
     assists?: number,
-    rebounds?: number
+    rebounds?: number,
+    clubName?: string,
+    teamName?: string
 }

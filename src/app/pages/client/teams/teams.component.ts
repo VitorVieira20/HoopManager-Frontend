@@ -62,7 +62,6 @@ export class TeamsComponent implements OnInit {
       next: (data) => this.team = data,
       error: (err) => console.log('Error while loading team information: ', err)
     });
-    console.log("Data: ", this.team)
   }
 
   private filterFavoriteTeams(teams: TeamResponse[]): TeamResponse[] {

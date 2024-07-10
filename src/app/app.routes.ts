@@ -28,36 +28,37 @@ import { ClubsComponent } from './pages/client/clubs/clubs.component';
 import { AdminRoleGuard } from './guards/admin-role.guard';
 import { UserRoleGuard } from './guards/user-role.guard';
 import { TeamsComponent } from './pages/client/teams/teams.component';
+import { PlayersComponent } from './pages/client/players/players.component';
 
 export const routes: Routes = [
     {
-        path: 'dashboard/:owner_id',
-        component: DashboardComponent,
-        canActivate: [AuthGuard, OwnerGuard, AdminRoleGuard],
-        children: [
-          { path: 'home', component: HomeDashboardComponent },
-          { path: 'clubs', component: ClubDashboardComponent },
-          { path: 'clubs/create-club', component: CreateClubComponent },
-          { path: 'clubs/edit-club/:club_id', component: EditClubComponent },
-          { path: 'teams', component: TeamDashboardComponent },
-          { path: 'teams/:club_id', component: TeamDashboardComponent },
-          { path: 'teams/create-team/:club_id', component: CreateTeamComponent },
-          { path: 'teams/edit-team/:team_id', component: EditTeamComponent },
-          { path: 'players', component: PlayersDahshboardComponent },
-          { path: 'players/:team_id', component: PlayersDahshboardComponent },
-          { path: 'players/create-player/:team_id', component: PlayersCreateComponent },
-          { path: 'players/edit-player/:player_id', component: PlayersEditComponent },
-          { path: 'games', component: GamesDashboardComponent },
-          { path: 'games/:team_id', component: GamesDashboardComponent },
-          { path: 'games/create-game/:team_id', component: GamesCreateComponent },
-          { path: 'games/edit-game/:game_id', component: GamesEditComponent },
-          { path: 'gamesInfo/:game_id', component: GameInfoDashboardComponent },
-          { path: 'gamesInfo/create-info/:game_id', component: GameInfoCreateComponent },
-          { path: 'gamesInfo/edit-info/:game_info_id', component: GameInfoEditComponent },
-          { path: 'contacts', component: ContactsComponent },
-          { path: 'contacts/:club_id', component: ContactsComponent },
-          { path: 'calendar/:team_id', component: CalendarDashboardComponent },
-        ]
+      path: 'dashboard/:owner_id',
+      component: DashboardComponent,
+      canActivate: [AuthGuard, OwnerGuard, AdminRoleGuard],
+      children: [
+        { path: 'home', component: HomeDashboardComponent },
+        { path: 'clubs', component: ClubDashboardComponent },
+        { path: 'clubs/create-club', component: CreateClubComponent },
+        { path: 'clubs/edit-club/:club_id', component: EditClubComponent },
+        { path: 'teams', component: TeamDashboardComponent },
+        { path: 'teams/:club_id', component: TeamDashboardComponent },
+        { path: 'teams/create-team/:club_id', component: CreateTeamComponent },
+        { path: 'teams/edit-team/:team_id', component: EditTeamComponent },
+        { path: 'players', component: PlayersDahshboardComponent },
+        { path: 'players/:team_id', component: PlayersDahshboardComponent },
+        { path: 'players/create-player/:team_id', component: PlayersCreateComponent },
+        { path: 'players/edit-player/:player_id', component: PlayersEditComponent },
+        { path: 'games', component: GamesDashboardComponent },
+        { path: 'games/:team_id', component: GamesDashboardComponent },
+        { path: 'games/create-game/:team_id', component: GamesCreateComponent },
+        { path: 'games/edit-game/:game_id', component: GamesEditComponent },
+        { path: 'gamesInfo/:game_id', component: GameInfoDashboardComponent },
+        { path: 'gamesInfo/create-info/:game_id', component: GameInfoCreateComponent },
+        { path: 'gamesInfo/edit-info/:game_info_id', component: GameInfoEditComponent },
+        { path: 'contacts', component: ContactsComponent },
+        { path: 'contacts/:club_id', component: ContactsComponent },
+        { path: 'calendar/:team_id', component: CalendarDashboardComponent },
+      ]
     },
     {
       path: 'client-dashboard/:user_id',
@@ -69,6 +70,8 @@ export const routes: Routes = [
         { path: 'clubs/:club_id', component: ClubsComponent },
         { path: 'teams', component: TeamsComponent },
         { path: 'teams/:team_id', component: TeamsComponent },
+        { path: 'players', component: PlayersComponent },
+        { path: 'players/:player_id', component: PlayersComponent },
       ]
     },
     { path: 'login', component: LoginComponent },

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { PlayerResponse } from '../../pages/types/player-response';
 import { PlayerRequest } from '../../pages/types/player-request';
 import { PlayerUpdateRequest } from '../../pages/types/player-update-request';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,18 @@ export class PlayerService {
 
   getPlayerById(playerId: string) {
     return this.httpClient.get<PlayerResponse>(this.apiUrl + playerId, { headers: this.getAuthHeaders() })
+      .pipe(
+        tap(response => console.log(`Fetched player with id ${playerId}:`, response))
+      );
+  }
+
+
+  getPlayersByName(playerName: string) {
+    return this.httpClient.get<PlayerResponse[]>(`${this.apiUrl}name/${playerName}`, { headers: this.getAuthHeaders() });
+  }
+
+  getFavoritePlayersByUserId(userId: string) {
+    return this.httpClient.get<PlayerResponse[]>(`${this.apiUrl}favs/${userId}`, { headers: this.getAuthHeaders() });
   }
 
   createPlayer(playerRequest: PlayerRequest) {
