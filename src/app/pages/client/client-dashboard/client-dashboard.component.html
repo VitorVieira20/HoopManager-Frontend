@@ -23,6 +23,11 @@
               Teams
             </li>
           </a>
+          <a [routerLink]="['/client-dashboard', userId, 'players']">
+            <li class="py-2 px-4 hover:bg-hover_color cursor-pointer">
+              Athletes
+            </li>
+          </a>
           <li (click)="logout()" class="py-2 px-4 hover:bg-hover_color cursor-pointer">
             Logout
           </li>

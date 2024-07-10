@@ -2,6 +2,7 @@
     <div class="w-full max-w-6xl bg-secondary rounded-lg shadow-lg p-6 mt-4">
         <h1 class="text-3xl font-semibold text-primary mb-6">Dashboard</h1>
 
+        <!-- Favorite Clubs Section -->
         <div class="bg-white p-6 rounded-lg shadow-md mb-6">
             <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Clubs</h2>
             <div *ngIf="clubs.length === 0" class="text-center text-textsecondary">
@@ -16,6 +17,7 @@
             </div>
         </div>
 
+        <!-- Favorite Teams Section -->
         <div class="bg-white p-6 rounded-lg shadow-md mb-6">
             <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Teams</h2>
             <div *ngIf="teams.length === 0" class="text-center text-textsecondary">
@@ -24,12 +26,14 @@
             <div *ngIf="teams.length > 0" class="flex flex-wrap gap-6">
                 <div *ngFor="let team of teams" class="flex-1 min-w-[calc(25%-1.5rem)] bg-gray-100 p-4 rounded-lg text-center relative hover:bg-gray-200 transition-colors">
                     <button (click)="showTeam(team.id, $event)">
-                        <h3 class="text-lg font-semibold text-textsecondary">{{ team.name }} <span class="text-sm text-gray-600 ml-2">Club: {{ team.clubName }}</span></h3>
+                        <h3 class="text-lg font-semibold text-textsecondary">{{ team.name }}</h3>
+                        <p class="text-sm text-gray-600">Club: {{ team.clubName }}</p>
                     </button>
                 </div>
             </div>
         </div>
 
+        <!-- Favorite Games Section -->
         <div class="bg-white p-6 rounded-lg shadow-md mb-6">
             <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Games</h2>
             <div *ngIf="games.length === 0" class="text-center text-textsecondary">
@@ -42,14 +46,19 @@
             </div>
         </div>
 
+        <!-- Favorite Athletes Section -->
         <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-            <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Players</h2>
+            <h2 class="text-2xl font-semibold text-primary mb-4">Favorite Athletes</h2>
             <div *ngIf="players.length === 0" class="text-center text-textsecondary">
-                <p>No favorite players yet.</p>
+                <p>No favorite athletes yet.</p>
             </div>
-            <div *ngIf="players.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div *ngFor="let player of players" class="bg-gray-100 p-4 rounded-lg text-center">
-                    <h3 class="text-lg font-semibold text-textsecondary">{{ player.name }}</h3>
+            <div *ngIf="players.length > 0" class="flex flex-wrap gap-6">
+                <div *ngFor="let player of players" class="flex-1 min-w-[calc(25%-1.5rem)] bg-gray-100 p-4 rounded-lg text-center relative hover:bg-gray-200 transition-colors">
+                    <button (click)="showPlayer(player.id, $event)">
+                        <h3 class="text-lg font-semibold text-textsecondary">{{ player.name }}</h3>
+                        <p class="text-sm text-gray-600">Club: {{ player.clubName }}</p>
+                        <p class="text-sm text-gray-600">Team: {{ player.teamName }}</p>
+                    </button>
                 </div>
             </div>
         </div>

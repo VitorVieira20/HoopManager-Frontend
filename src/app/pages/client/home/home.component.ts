@@ -76,15 +76,19 @@ export class HomeComponent implements OnInit {
   loadUserInfoAndFavorites(): void {
     this.loadUserInfo().pipe(
       switchMap(data => {
+        console.log('User info loaded:', data);
+        
         this.clubsList = data.clubs || [];
         this.teamsList = data.teams || [];
         this.gamesList = data.games || [];
-        this.playersList = data.players || [];
+        this.playersList = data.athletes || [];
 
         return this.loadUserFavorites(this.clubsList, this.teamsList, this.gamesList, this.playersList);
       })
     ).subscribe({
       next: (responses) => {
+        console.log('Responses:', responses);
+
         const clubCount = this.clubsList ? this.clubsList.length : 0;
         const teamCount = this.teamsList ? this.teamsList.length : 0;
         const gameCount = this.gamesList ? this.gamesList.length : 0;
@@ -93,15 +97,11 @@ export class HomeComponent implements OnInit {
         this.teams = responses.slice(clubCount, clubCount + teamCount) as TeamResponse[];
         this.games = responses.slice(clubCount + teamCount, clubCount + teamCount + gameCount) as GameResponse[];
         this.players = responses.slice(clubCount + teamCount + gameCount) as PlayerResponse[];
-
-        console.log(this.clubs);
-        console.log(this.teams);
-        console.log(this.games);
-        console.log(this.players);
       },
-      error: (err) => console.log('Error while loading user information and favorites: ', err)
+      error: (err) => console.log('Error while loading user information and favorites:', err)
     });
-  }
+}
+
 
   showClub(clubId: string, event: MouseEvent): void {
     event.stopPropagation();
@@ -111,5 +111,10 @@ export class HomeComponent implements OnInit {
   showTeam(teamId: string, event: MouseEvent): void {
     event.stopPropagation();
     this.router.navigate(['/client-dashboard', this.userId, 'teams', teamId])
+  }
+
+  showPlayer(playerId: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.router.navigate(['/client-dashboard', this.userId, 'players', playerId])
   }
 }
