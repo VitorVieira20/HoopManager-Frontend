@@ -34,6 +34,7 @@ export class TeamDashboardComponent implements OnInit {
 
   ownerId: string = '';
   clubId: string = '';
+  plan: string = '';
   teams: TeamResponse[] = [];
   clubs: ClubResponse[] = [];
   selectedClubId: string = '';
@@ -52,6 +53,7 @@ export class TeamDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.ownerId = this.route.parent?.snapshot.params['owner_id'];
     this.clubId = this.route.snapshot.params['club_id'];
+    this.plan = sessionStorage.getItem('user-plan') || ''
     this.loadClubs();
   }
 
@@ -114,5 +116,14 @@ export class TeamDashboardComponent implements OnInit {
 
   onCreateClub(): void {
     this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'create-club']);
+  }
+
+  getTeamLimit(): number {
+    if (this.plan === 'standard') {
+      return 4;
+    } else if (this.plan === 'pro') {
+      return 8;
+    }
+    return 0;
   }
 }

@@ -22,8 +22,11 @@
                 <button (click)="openDeleteModal(deleteModal, club)" class="mt-4 flex-1 px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-900 text-center">
                   Delete Club
                 </button>
-              </div>              
+              </div>         
             </div>
+            <button *ngIf="clubs.length < getClubLimit()" class="mt-4 px-6 py-2 bg-button_primary_color text-white rounded-md hover:bg-button_primary_hover" (click)="onCreateClub()">
+              Create Club
+            </button>            
           </div>
         </div>
       </ng-container>

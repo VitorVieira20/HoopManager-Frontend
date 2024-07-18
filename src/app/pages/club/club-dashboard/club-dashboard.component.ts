@@ -27,6 +27,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 export class ClubDashboardComponent implements OnInit {
 
   ownerId: string = '';
+  plan: string = '';
   clubs: ClubResponse[] = [];
   clubToDelete: ClubResponse | null = null;
   modalRef?: NgbModalRef;
@@ -41,6 +42,7 @@ export class ClubDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.ownerId = this.route.parent?.snapshot.params['owner_id'];
+    this.plan = sessionStorage.getItem('user-plan') || ''
     this.loadClubs();
   }
 
@@ -84,5 +86,14 @@ export class ClubDashboardComponent implements OnInit {
         error: (err) => console.error('Error deleting club', err)
       });
     }
+  }
+
+  getClubLimit(): number {
+    if (this.plan === 'standard') {
+      return 2;
+    } else if (this.plan === 'pro') {
+      return 5;
+    }
+    return 0;
   }
 }

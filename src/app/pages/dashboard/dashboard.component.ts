@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit {
     sessionStorage.removeItem('user-email');
     sessionStorage.removeItem('user-id');
     sessionStorage.removeItem('user-role');
+    sessionStorage.removeItem('user-plan');
     this.router.navigate(['/login']);
   }
   

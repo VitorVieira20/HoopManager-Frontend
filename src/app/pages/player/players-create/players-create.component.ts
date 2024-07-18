@@ -38,7 +38,7 @@ export class PlayersCreateComponent implements OnInit {
     private modalService: NgbModal
   ) {
     this.createPlayerForm = new FormGroup<CreatePlayerForm>({
-      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      name: new FormControl('', [Validators.required, Validators.minLength(1)]),
       position: new FormControl('', [Validators.required, Validators.minLength(1)]),
     });
   }

@@ -37,6 +37,7 @@ export class PlayersDahshboardComponent implements OnInit {
   ownerId: string = '';
   clubId: string = '';
   teamId: string = '';
+  plan: string = '';
   clubs: ClubResponse[] = [];
   teams: TeamResponse[] = [];
   players: PlayerResponse[] = [];
@@ -59,6 +60,7 @@ export class PlayersDahshboardComponent implements OnInit {
     this.ownerId = this.route.parent?.snapshot.params['owner_id'];
     this.clubId = this.route.snapshot.params['club_id'];
     this.teamId = this.route.snapshot.params['team_id'];
+    this.plan = sessionStorage.getItem('user-plan') || ''
     this.loadClubs();
   }
 
@@ -166,5 +168,14 @@ export class PlayersDahshboardComponent implements OnInit {
 
   onCreateClub(): void {
     this.router.navigate(['/dashboard', this.ownerId, 'clubs', 'create-club']);
+  }
+
+  getPlayersLimit(): number {
+    if (this.plan === 'standard') {
+      return 10;
+    } else if (this.plan === 'pro') {
+      return 15;
+    }
+    return 0;
   }
 }

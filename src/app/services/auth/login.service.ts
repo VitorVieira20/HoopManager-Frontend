@@ -19,6 +19,7 @@ export class LoginService {
         sessionStorage.setItem("auth-token", value.token)
         sessionStorage.setItem('user-id', value.id)
         sessionStorage.setItem('user-role', value.role)
+        sessionStorage.setItem('user-plan', value.plan)
       })
     )
   }
